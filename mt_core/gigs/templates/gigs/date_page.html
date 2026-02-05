@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ venue.name }} - {{ gig_date }}</title>
+</head>
+
+<body>
+    <h1>{{ venue.name }}</h1>
+    <p><strong>{{ gig_date }}</strong></p>
+         
+    <p>100% of your tip goes directly to the artist.</p>
+
+    {% if gigs %}
+        <ul>
+            {% for gig in gigs %}
+            <li>
+                <h2>{{ gig.artist.name }}</h2>
+                <button disabled>Tip This Artist</button>
+                <p>Tip: £{{ gig.tip_amount }}</p>
+            </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</body>
+
+</html>

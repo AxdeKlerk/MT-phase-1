@@ -33,4 +33,4 @@ class Gig(models.Model):
         unique_together = ("artist", "venue", "gig_date")
     
     def __str__(self):
-       return f"{self.artist.name} at {self.venue.name} on {self.gig_date}"
+        return f"{self.artist} at {self.venue} on {self.gig_date}"

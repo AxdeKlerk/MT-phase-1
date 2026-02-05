@@ -1,6 +1,6 @@
 from django.urls import path
-from gigs.views import date_page_debug
+from .views import date_page
 
 urlpatterns = [
-    path('debug/<slug:venue_slug>/<str:gig_date>/', date_page_debug, name='date_page_debug'),
+    path("<slug:venue_slug>/<int:year>-<int:month>-<int:day>/", date_page, name="date_page",),
 ]
