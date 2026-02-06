@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Date Page</title>
+
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/style.css' %}">
+</head>
+
+<body>
+    <h1>{{ artist.name }}</h1>
+    <p>Tip this artist for their performance at {{ venue.name }} on {{ gig_date }}.</p>
+    <p>Artist receives 100% of your tip.</p>
+    <div>
+        {% for amount in amounts %}
+            <Button diabled>Tip £{{ amount }}</Button>
+        {% endfor %}
+        <button disabled>Custom Amount</button>
+    </div>
+    <p>
+        <a href="{% url 'date_page' venue.slug gig_date.year gig_date.month gig_date.day %}" class="btn">← Back to the Night</a>
+    </p>
+</body>
+</html>
