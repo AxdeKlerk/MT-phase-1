@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ artist.name }} | Pay Tip{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid w-100">
+    <div class="row">
+        <div class="col-12 title text-center">
+            <h1>{{ venue.name }}</h1>
+            <p>{{ gig_date|date:"d M Y" }}</p>
+        </div>
+        <div class="text-left">
+            <div class="back-btn">
+                <a href="{% url 'gigs:tip_page' gig.artist.id %}" class="link">← Back to Artist</a>
+            </div>
+        </div>
+        <hr>
+            <div class="artist-tip-row">
+                <div class="artist-logo-tip-box">
+                    {% include "gigs/artist_logo.html" with artist=gig.artist %}
+                </div>
+            </div>
+            <div class="text-center">
+                {% for amount in amounts %}
+                    <Button class="btn pay-btn">Tip £{{ amount }}</Button>
+                {% endfor %}
+            </div>
+            <hr>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

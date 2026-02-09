@@ -1,26 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Date Page</title>
+{% extends 'base.html' %}
+{% load static %}
 
-    {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/style.css' %}">
-</head>
+{% block title %}{{ artist.name }}{% endblock %}
 
-<body>
-    <h1>{{ artist.name }}</h1>
-    <p>Tip this artist for their performance at {{ venue.name }} on {{ gig_date }}.</p>
-    <p>Artist receives 100% of your tip.</p>
-    <div>
-        {% for amount in amounts %}
-            <Button diabled>Tip £{{ amount }}</Button>
-        {% endfor %}
-        <button disabled>Custom Amount</button>
+{% block content %}
+
+<div class="container-fluid w-100">
+    <div class="row">
+        <div class="col-12 title text-center">
+            <h1>{{ venue.name }}</h1>
+            <p>{{ gig_date|date:"d M Y" }}</p>
+            <p class="fs-6">Artist gets 100% of your tip!</p>
+        </div>
+        <div class="text-left">
+            <div class="back-btn">
+                <a href="{% url 'gigs:date_page' venue.slug gig_date.year gig_date.month gig_date.day %}" class="link">← Back to Artist List for Today</a>
+            </div>
+        </div>
+        <hr>
+            <div class="artist-tip-row">
+                <div class="artist-logo-tip-box">
+                    {% include "gigs/artist_logo.html" with artist=gig.artist %}
+                </div>
+            </div>
+            <div class="text-center">
+                {% for amount in amounts %}
+                    <a href="{% url 'gigs:payment_page' gig.id amount %}" class="btn tip-btn">Tip £{{ amount }}</a>
+                {% endfor %}
+            </div>
+            <hr>
+        </div>
     </div>
-    <p>
-        <a href="{% url 'date_page' venue.slug gig_date.year gig_date.month gig_date.day %}" class="btn">← Back to the Night</a>
-    </p>
-</body>
-</html>
+</div>
+
+{% endblock %}
+
+

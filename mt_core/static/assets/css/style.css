@@ -6,28 +6,133 @@
 body {
     background-color: #000000;
     color: #f5f5f5;
-    font-size: 11px;
+    font-size: 12px;
+    margin: 0 auto;
 }
-h1 {
+h1, h2, h3, h4, h5, h6 {
     font-family: 'Roboto Mono', monospace;
     color: #f5f5f5;
 }
 p {
     font-family: 'Geist Mono', monospace;
     color: #f5f5f5;
+    margin-bottom: 1rem;
+    margin-top: 0.5rem;
 }
-ul {
-    list-style-type: none;
+.header-container {
+    background-color: #000000;
+    padding-top: 1rem;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    margin: 0 auto;
 }
-.btn {
+.title {
+    margin-bottom: 1rem;
+    margin-top: 6rem;
+}
+.cta-btn {
     text-decoration: none;
     color: #f5f5f5;
     border-radius: 5px;
     border-color: red;
     border-width: 1px;
     border-style: solid;
-    padding: 10px;
+    padding: 5px 10px;
+    font-size: 0.8rem;
+    margin-bottom: 0;
 }
-.btn:hover {
+.cta-btn:hover {
     background-color: red;
+}
+.tip-btn {
+    text-decoration: none;
+    color: #f5f5f5;
+    border-radius: 5px;
+    border-color: red;
+    border-width: 1px;
+    border-style: solid;
+    padding: 5px 10px;
+    font-size: 0.8rem;
+    margin-bottom: 1rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    vertical-align: middle;
+}
+.tip-btn:hover {
+    background-color: red;
+}
+.back-btn {
+    margin-bottom: 1rem;
+}
+a {
+    display: inline-block;
+}
+.link {
+    text-decoration: none;
+    color: #f5f5f5;
+}
+.link:hover {
+    color: red;
+    text-decoration: none;
+}
+.artist-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    gap: 1rem;
+}
+.artist-logo-box {
+    width: 160px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+.artist-logo-box img {
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+}
+.artist-tip-row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin: 0 0 1rem 0;
+}
+.artist-logo-tip-box {
+    width: 296px;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+.artist-logo-tip-box img {
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+}
+hr {
+    border: 0;
+    border-top: 1px solid #f5f5f5;
+    margin: 1rem 0;
+    width: 100%;
+}
+
+/* Media Queries */
+@media (max-width: 330px) {
+    .artist-row {
+        padding-right: auto;
+    }
+    .cta-btn {
+        font-size: 0.7rem;
+    }
 }

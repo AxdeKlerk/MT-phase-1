@@ -1,0 +1,7 @@
+{% if artist.logo %}
+    <img src="{{ artist.logo.url }}" alt="{{ artist.name }} logo" class="img-fluid artist-logo">
+{% else %}
+    <div class="mt-2 mb-2">
+        <h2>{{ artist.name }}</h2>
+    </div>
+{% endif %}

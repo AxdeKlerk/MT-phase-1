@@ -1,5 +1,8 @@
 import environ
 from pathlib import Path
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -10,12 +13,29 @@ env = environ.Env(
 )
 env.read_env(BASE_DIR / '.env')
 
+# Application definition and other settings are defined below
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env('SECRET_KEY')
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG')
+
+#Cloudinary configuration
+cloudinary.config(
+    cloud_name=env("CLOUDINARY_CLOUD_NAME"),
+    api_key=env("CLOUDINARY_API_KEY"),
+    api_secret=env("CLOUDINARY_API_SECRET"),
+)
+
+# Square API
+#SQUARE_APPLICATION_ID = os.getenv('SQUARE_APPLICATION_ID')
+#SQUARE_ACCESS_TOKEN = os.getenv('SQUARE_ACCESS_TOKEN')
+#SQUARE_LOCATION_ID = os.getenv('SQUARE_LOCATION_ID')
+#SQUARE_SIGNATURE_KEY = os.getenv("SQUARE_SIGNATURE_KEY")
+#SQUARE_BASE_URL = os.getenv("SQUARE_BASE_URL", "https://connect.squareupsandbox.com")
 
 ALLOWED_HOSTS = 'localhost', '127.0.0.1'
 
@@ -30,6 +50,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'gigs',
+    'cloudinary',
+    'cloudinary_storage',
 ]
 
 MIDDLEWARE = [
@@ -48,7 +70,7 @@ ROOT_URLCONF = 'core.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / "templates"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -94,18 +116,10 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 # Internationalization
-LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'UTC'
+LANGUAGE_CODE = 'en-gb'
+TIME_ZONE = 'Europe/London'
 USE_I18N = True
 USE_TZ = True
-
-# Custom date/time formats
-USE_L10N = False
-DATE_FORMAT = 'd M Y'        
-DATETIME_FORMAT = 'd M Y H:i' 
-DATE_INPUT_FORMATS = ['%d-%m-%Y']
-DATETIME_INPUT_FORMATS = ['%d-%m-%Y %H:%M']
-
 
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = 'static/'
@@ -115,4 +129,7 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
+
 

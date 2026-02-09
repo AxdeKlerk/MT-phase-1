@@ -1,32 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ venue.name }} - {{ gig_date }}</title>
+{% extends 'base.html' %}
+{% load static %}
 
-    {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/style.css' %}">
-</head>
+{% block title %}ROXOFF | Tip The Artist{% endblock %}
 
-<body>
-    <h1>{{ venue.name }}</h1>
-    <p><strong>{{ gig_date }}</strong></p>
-         
-    <p>100% of your tip goes directly to the artist.</p>
+{% block content %}
+
+<div class="container-fluid w-100">
+    <div class="row">
+        <div class="col-12 title text-center">
+            <h1>{{ venue.name }}</h1>
+            <p>{{ gig_date|date:"d M Y" }}</p>
+            <p class="fs-6"><strong>100%</strong> goes to the artist!</p>
 
     {% if gigs %}
-        <ul>
-            {% for gig in gigs %}
-            <li>
-                <h2>{{ gig.artist.name }}</h2>
-                <a href="{% url 'tip_page' gig.id %}" class="btn btn-primary">Tip This Artist</a>                
-            </li>
-            {% endfor %}
-        </ul>
-        {% else %}
-        <p>No gigs found for this date and venue.</p>
+        {% for gig in gigs %}
+            <div class="artist-row">
+                <div class="artist-logo-box">
+                    {% include "gigs/artist_logo.html" with artist=gig.artist %}
+                </div>
+                <a href="{% url 'gigs:tip_page' gig.id %}" class="btn cta-btn">Tip This Artist</a>
+            </div>
+            <hr class="w-100">   
+        {% endfor %}  
+            {% else %}
+                <p>No gigs found for this date and venue.</p>
     {% endif %}
-</body>
-
-</html>
+        </div>
+    </div>
+</div>
+{% endblock %}

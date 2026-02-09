@@ -12,11 +12,14 @@ class VenueAdmin(admin.ModelAdmin):
     list_display = ('name', 'is_active', 'created_at')
     search_fields = ('name',)
     list_filter = ('name', 'is_active')
+    prepopulated_fields = {"slug": ("name",)}
+
 
 @admin.register(Gig)
 class GigAdmin(admin.ModelAdmin):
     list_display = ('artist', 'venue', 'gig_date', 'created_at')
     search_fields = ('artist__name', 'venue__name')
-    list_filter = ('gig_date', 'artist__name', 'venue__name')
+    list_filter = ('gig_date', 'artist', 'venue')
     ordering = ('-gig_date',)
     list_select_related = ('artist', 'venue')
+
