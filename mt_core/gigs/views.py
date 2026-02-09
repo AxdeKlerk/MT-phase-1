@@ -1,4 +1,7 @@
-from django.http import HttpResponse
+import json
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import get_object_or_404, render
 from .models import Venue, Gig
 from datetime import date
@@ -62,18 +65,25 @@ def venue(request, venue_slug):
 
     return render(request, "gigs/date_page.html", context)
 
-def payment_page(request, gig_id, amount):
-    gig = get_object_or_404(
-        Gig.objects.select_related("artist", "venue"),
-        pk=gig_id
-    )
+@require_POST
+def start_payment(request):
+    try:
+        data = json.loads(request.body)
+        gig_id = data.get("gig_id")
+        amount = data.get("amount")
+    except json.JSONDecodeError:
+        return(JsonResponse({"status": "error", "message": "Invalid JSON"}, status=400))
+    
+    # Validate Gig
+    gig = get_object_or_404(Gig.objects.select_related("artist"), pk=gig_id)
+    
 
-    context = {
-        "gig": gig,
-        "artist": gig.artist,
-        "venue": gig.venue,
-        "gig_date": gig.gig_date,
-        "amount": amount,
-    }
+    #Enforce Business Rules
+    if not gig.artist.is_active:
+        return JsonResponse({"status": "error", "message": "Artist is not active"}, status=400)
+    
+    #Stub Success Response
+    if amount not in [2, 5, 10]:  # Validate amount
+        return JsonResponse({"status": "error", "message": "Invalid tip amount"}, status=400)
 
-    return render(request, "gigs/payment_page.html", context)
+    return JsonResponse({"status": "success", "message": "Payment initiated successfully"})

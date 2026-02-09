@@ -1,5 +1,6 @@
 from django.db import models
 from cloudinary.models import CloudinaryField
+from decimal import Decimal
 
 class Artist(models.Model):
     name = models.CharField(max_length=250, unique=True)
@@ -43,3 +44,45 @@ class Gig(models.Model):
     
     def __str__(self):
         return f"{self.artist} at {self.venue} on {self.gig_date}"
+    
+class Payment(models.Model):
+    gig = models.ForeignKey(Gig, on_delete=models.CASCADE)
+    amount = models.DecimalField(max_digits=5, decimal_places=2)
+    payment_date = models.DateTimeField(auto_now_add=True)
+    reference = models.CharField(max_length=255, blank=True, null=True)
+
+    STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('successful', 'Successful'),
+        ('failed', 'Failed'),
+    ]
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+
+    @property
+    def artist(self):
+        return self.gig.artist
+
+    @property
+    def venue(self):
+        return self.gig.venue
+
+    @property
+    def gig_date(self):
+        return self.gig.gig_date
+    
+    @property
+    def is_successful(self):
+        return self.status == 'successful'
+    
+    @property
+    def is_pending(self):
+        return self.status == 'pending'
+    
+    @property
+    def amount_in_pence(self):
+        return int(self.amount * Decimal(100))
+
+    def __str__(self):
+        return f"Payment of £{self.amount} for {self.artist} at {self.venue} on {self.gig_date}"
+
+

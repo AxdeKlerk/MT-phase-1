@@ -54,11 +54,9 @@ p {
     border-color: red;
     border-width: 1px;
     border-style: solid;
-    padding: 5px 10px;
-    font-size: 0.8rem;
-    margin-bottom: 1rem;
-    margin-left: 1rem;
-    margin-right: 1rem;
+    padding: 2px 10px;
+    font-size: 1.2rem;
+    margin: 0 1rem 1rem 0;
     vertical-align: middle;
 }
 .tip-btn:hover {
@@ -66,6 +64,9 @@ p {
 }
 .back-btn {
     margin-bottom: 1rem;
+}
+#tip-confirmation {
+    margin-bottom: 0;
 }
 a {
     display: inline-block;
@@ -81,7 +82,7 @@ a {
 .artist-row {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-evenly;
     padding-left: 1rem;
     padding-right: 1rem;
     gap: 1rem;

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Artist, Venue, Gig
+from .models import Artist, Venue, Gig, Payment
 
 @admin.register(Artist)
 class ArtistAdmin(admin.ModelAdmin):
@@ -22,4 +22,13 @@ class GigAdmin(admin.ModelAdmin):
     list_filter = ('gig_date', 'artist', 'venue')
     ordering = ('-gig_date',)
     list_select_related = ('artist', 'venue')
+
+
+@admin.register(Payment)
+class PaymentAdmin(admin.ModelAdmin):
+    list_display = ('artist','gig_date', 'amount', 'payment_date')
+    search_fields = ('gig__artist__name', 'gig__venue__name')
+    list_filter = ('payment_date', 'amount')
+    ordering = ('-payment_date',)
+    list_select_related = ('gig__artist', 'gig__venue')
 

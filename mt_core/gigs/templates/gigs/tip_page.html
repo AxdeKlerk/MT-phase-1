@@ -8,27 +8,59 @@
 <div class="container-fluid w-100">
     <div class="row">
         <div class="col-12 title text-center">
+
+            <!-- Header -->
             <h1>{{ venue.name }}</h1>
             <p>{{ gig_date|date:"d M Y" }}</p>
             <p class="fs-6">Artist gets 100% of your tip!</p>
         </div>
+
+        <!-- Back Link -->
         <div class="text-left">
             <div class="back-btn">
                 <a href="{% url 'gigs:date_page' venue.slug gig_date.year gig_date.month gig_date.day %}" class="link">← Back to Artist List for Today</a>
             </div>
         </div>
         <hr>
+            <!-- Artist Logo -->
             <div class="artist-tip-row">
                 <div class="artist-logo-tip-box">
                     {% include "gigs/artist_logo.html" with artist=gig.artist %}
                 </div>
             </div>
+            <h3 class="text-center">Tip {{ artist.name }}</h3>
+
+            <!-- Amount buttons -->
             <div class="text-center">
                 {% for amount in amounts %}
-                    <a href="{% url 'gigs:payment_page' gig.id amount %}" class="btn tip-btn">Tip £{{ amount }}</a>
+                    <button type="button" class="btn tip-btn" data-amount="{{ amount }}">£{{ amount }}</button>
                 {% endfor %}
             </div>
             <hr>
+        </div>
+    </div>
+
+    <div class="row" id="tip-section" data-gig-id="{{ gig.id }}"
+        data-artist-name="{{ artist.name }}"
+        data-amounts="{{ amounts|join:',' }}"
+        data-start-url="{% url 'gigs:start_payment' %}"
+        data-csrf="{{ csrf_token }}"> 
+        <div class="col">
+            <div class="tip-section text-center">
+
+                <!-- Confirmation text -->
+                <p id="tip-confirmation" class="mt-3 d-none"></p>
+
+                <!-- Clear option -->
+                <button id="clear-tip" class="btn btn-link d-none">
+                    Change amount
+                </button>
+
+                <!-- Pay button -->
+                <button id="pay-btn" class="btn cta-btn mt-3" disabled>
+                    Select an Amount to Tip
+                </button>
+            </div>
         </div>
     </div>
 </div>

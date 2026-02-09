@@ -8,16 +8,22 @@
 <div class="container-fluid w-100">
     <div class="row">
         <div class="col-12 title text-center">
+
+            <!-- Header -->
             <h1>{{ venue.name }}</h1>
             <p>{{ gig_date|date:"d M Y" }}</p>
             <p class="fs-6"><strong>100%</strong> goes to the artist!</p>
 
     {% if gigs %}
         {% for gig in gigs %}
+
+            <!-- Artist Logo -->
             <div class="artist-row">
                 <div class="artist-logo-box">
                     {% include "gigs/artist_logo.html" with artist=gig.artist %}
                 </div>
+
+                <!-- CTA Btn-->
                 <a href="{% url 'gigs:tip_page' gig.id %}" class="btn cta-btn">Tip This Artist</a>
             </div>
             <hr class="w-100">   
