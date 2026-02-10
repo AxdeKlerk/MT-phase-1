@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const confirmationText = document.getElementById("tip-confirmation");
     const clearButton = document.getElementById("clear-tip");
     const payButton = document.getElementById("pay-btn");
+    const payConfirmation = document.getElementById("pay-confirmation");
 
     // Amount selection
     amountButtons.forEach(button => {
@@ -29,7 +30,9 @@ document.addEventListener("DOMContentLoaded", () => {
             /* clearButton.classList.remove("d-none");*/
 
             payButton.disabled = false;
-            payButton.textContent = `Confirm and Pay £${selectedAmount}`
+            payButton.textContent = `Confirm and Tip £${selectedAmount}`;
+            payConfirmation.textContent = `You are an absolute legend!\nThank you for supporting live music.`;
+
         });
     });
 

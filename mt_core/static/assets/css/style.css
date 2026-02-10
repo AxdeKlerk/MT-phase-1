@@ -68,6 +68,9 @@ p {
 #tip-confirmation {
     margin-bottom: 0;
 }
+#pay-confirmation {
+    white-space: pre-line;
+}
 a {
     display: inline-block;
 }
