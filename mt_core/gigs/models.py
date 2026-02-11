@@ -2,6 +2,7 @@ from django.db import models
 from cloudinary.models import CloudinaryField
 from decimal import Decimal
 
+
 class Artist(models.Model):
     name = models.CharField(max_length=250, unique=True)
     payment_reference = models.CharField(
@@ -38,6 +39,8 @@ class Gig(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     play_order = models.PositiveIntegerField(
         default=0, help_text="Order in which venues are displayed")
+    cover_processing_fees = models.BooleanField(
+        default=False, help_text="If true, MT will cover payment processing fees for this gig")
 
     class Meta:
         unique_together = ("artist", "venue", "gig_date")
@@ -50,7 +53,7 @@ class Payment(models.Model):
     amount = models.DecimalField(max_digits=5, decimal_places=2)
     payment_date = models.DateTimeField(auto_now_add=True)
     reference = models.CharField(max_length=255, blank=True, null=True)
-
+    
     STATUS_CHOICES = [
         ('pending', 'Pending'),
         ('successful', 'Successful'),

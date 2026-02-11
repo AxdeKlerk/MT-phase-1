@@ -138,6 +138,9 @@ hr {
     max-width: 100%;
     object-fit: contain;
 }
+#fee-message {
+    color: red;
+}
 
 
 /* Media Queries */

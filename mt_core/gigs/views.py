@@ -1,9 +1,10 @@
 import json
+from multiprocessing import context
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import get_object_or_404, render
-from .models import Venue, Gig
+from .models import Venue, Gig, Artist, Payment
 from datetime import date
 
 def date_page(request, venue_slug, year, month, day):
@@ -32,12 +33,18 @@ def tip_page(request, gig_id):
         pk=gig_id
     )
 
+    if gig.cover_processing_fees:
+        fee_message = "No processing fees are being charged<br>for day 1 of this pilot!"
+    else:
+        fee_message = "Payment processor fee of (1.5% + 20p)<br>applies at checkout"
+
     context = {
         "gig": gig,
         "artist": gig.artist,
         "venue": gig.venue,
         "gig_date": gig.gig_date,
         "amounts": [2, 5, 10],  # placeholder amounts
+        "fee_message": fee_message
     }
 
     return render(request, "gigs/tip_page.html", context)
@@ -87,3 +94,6 @@ def start_payment(request):
         return JsonResponse({"status": "error", "message": "Invalid tip amount"}, status=400)
 
     return JsonResponse({"status": "success", "message": "Payment initiated successfully"})
+
+
+

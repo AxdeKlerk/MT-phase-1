@@ -14,6 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const clearButton = document.getElementById("clear-tip");
     const payButton = document.getElementById("pay-btn");
     const payConfirmation = document.getElementById("pay-confirmation");
+    const feeMessage = document.getElementById("fee-message");
 
     // Amount selection
     amountButtons.forEach(button => {
@@ -24,15 +25,18 @@ document.addEventListener("DOMContentLoaded", () => {
             button.classList.add("active");
 
             confirmationText.textContent =
-                `You are tipping £${selectedAmount} to ${artistName}`;
+                `You are tipping £${selectedAmount} to\n${artistName}`;
             confirmationText.classList.remove("d-none");
-
-            /* clearButton.classList.remove("d-none");*/
 
             payButton.disabled = false;
             payButton.textContent = `Confirm and Tip £${selectedAmount}`;
             payConfirmation.textContent = `You are an absolute legend!\nThank you for supporting live music.`;
 
+            if (feeMessage && feeMessage.textContent.trim() !== "") {
+                feeMessage.classList.remove("d-none");
+            }
+
+            /* clearButton.classList.remove("d-none");*/
         });
     });
 
