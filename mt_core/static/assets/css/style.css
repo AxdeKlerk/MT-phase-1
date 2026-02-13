@@ -141,6 +141,10 @@ hr {
 #fee-message {
     color: red;
 }
+#card-container p {
+    color: red;
+}
+
 
 
 /* Media Queries */

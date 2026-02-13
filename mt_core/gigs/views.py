@@ -50,7 +50,8 @@ def tip_page(request, gig_id):
         "venue": gig.venue,
         "gig_date": gig.gig_date,
         "amounts": [2, 5, 10],  # placeholder amounts
-        "fee_message": fee_message
+        "fee_message": fee_message,
+        "STRIPE_PUBLIC_KEY": settings.STRIPE_PUBLISHABLE_KEY
     }
 
     return render(request, "gigs/tip_page.html", context)
@@ -85,21 +86,39 @@ def start_payment(request):
         gig_id = data.get("gig_id")
         amount = data.get("amount")
     except json.JSONDecodeError:
-        return(JsonResponse({"status": "error", "message": "Invalid JSON"}, status=400))
-    
+        return JsonResponse({"error": "Invalid JSON"}, status=400)
+
+    if not gig_id or not amount:
+        return JsonResponse({"error": "Missing data"}, status=400)
+
     # Validate Gig
     gig = get_object_or_404(Gig.objects.select_related("artist"), pk=gig_id)
-    
 
-    #Enforce Business Rules
+    # Enforce Business Rules
     if not gig.artist.is_active:
-        return JsonResponse({"status": "error", "message": "Artist is not active"}, status=400)
-    
-    #Stub Success Response
-    if amount not in [2, 5, 10]:  # Validate amount
-        return JsonResponse({"status": "error", "message": "Invalid tip amount"}, status=400)
+        return JsonResponse({"error": "Artist is not active"}, status=400)
 
-    return JsonResponse({"status": "success", "message": "Payment initiated successfully"})
+    if amount not in [2, 5, 10]:
+        return JsonResponse({"error": "Invalid tip amount"}, status=400)
+
+    try:
+        amount_decimal = Decimal(amount)
+        amount_pence = int(amount_decimal * 100)
+    except:
+        return JsonResponse({"error": "Invalid amount format"}, status=400)
+
+    intent = stripe.PaymentIntent.create(
+        amount=amount_pence,
+        currency="gbp",
+        payment_method_types=["card"],
+        metadata={
+            "gig_id": str(gig_id)
+        }
+    )
+
+    return JsonResponse({
+        "client_secret": intent.client_secret
+    })
 
 
 @csrf_exempt

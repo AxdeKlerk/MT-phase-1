@@ -5,6 +5,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import redirect
 from gigs.models import Gig, Payment
 from datetime import date
+from decimal import Decimal
+from django.db import IntegrityError
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
@@ -62,7 +64,32 @@ def stripe_webhook(request):
         if Payment.objects.filter(processor_id=processor_id).exists():
             print(f"Duplicate webhook ignored for {processor_id}")
             return HttpResponse(status=200)
+        
+        # Convert pence to Decimal pounds safely
+        amount = Decimal(amount_received) / Decimal("100")
+
+        # Fetch Gig safely
+        try:
+            gig = Gig.objects.get(pk=gig_id)
+        except Gig.DoesNotExist:
+            print(f"Gig {gig_id} not found")
+            return HttpResponse(status=400)
+
+        # Create Payment record
+        try:
+            Payment.objects.create(
+                gig=gig,
+                amount=amount,
+                processor_id=processor_id,
+                status="successful",
+            )
+            print(f"Ledger write complete for {processor_id}")
+        except IntegrityError:
+            print(f"Race condition prevented duplicate write for {processor_id}")
+            return HttpResponse(status=200)
 
         print(f"E3 CONFIRMED for processor ID: {processor_id}")
 
     return HttpResponse(status=200)
+
+

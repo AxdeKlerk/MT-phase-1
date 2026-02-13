@@ -16,6 +16,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const payConfirmation = document.getElementById("pay-confirmation");
     const feeMessage = document.getElementById("fee-message");
 
+    // Initialise Stripe
+    const stripe = Stripe(window.STRIPE_PUBLIC_KEY);
+    const elements = stripe.elements();
+
+    const card = elements.create("card");
+    card.mount("#card-element");
+
+
     // Amount selection
     amountButtons.forEach(button => {
         button.addEventListener("click", () => {
@@ -25,7 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
             button.classList.add("active");
 
             confirmationText.textContent =
-                `You are tipping £${selectedAmount} to\n${artistName}`;
+                `You are tipping £${selectedAmount} to ${artistName}`;
             confirmationText.classList.remove("d-none");
 
             payButton.disabled = false;
@@ -49,27 +57,78 @@ document.addEventListener("DOMContentLoaded", () => {
         clearButton.classList.add("d-none");
     });*/
 
-    // Pay button (stubbed)
-    payButton.addEventListener("click", () => {
+    // Pay button
+    payButton.addEventListener("click", async () => {
         if (!selectedAmount) return;
 
-        fetch(startUrl, {
+        // If client secret already exists → confirm payment
+        if (payButton.dataset.clientSecret) {
+            payButton.disabled = true;
+            payButton.textContent = "Processing...";
+
+            const { error, paymentIntent } = await stripe.confirmCardPayment(
+                payButton.dataset.clientSecret,
+                {
+                    payment_method: {
+                        card: card
+                    }
+                }
+            );
+
+            if (error) {
+                document.getElementById("card-errors").textContent = error.message;
+                payButton.disabled = false;
+                payButton.textContent = `Pay £${selectedAmount} Now`;
+            } else if (paymentIntent.status === "succeeded") {
+                payButton.textContent = "Payment Successful";
+
+                // Hide card container
+                document.getElementById("card-container").classList.add("d-none");
+
+                // Show thank you message
+                confirmationText.textContent = `Thank you for supporting ${artistName}!`;
+
+                // Reset selection state
+                selectedAmount = null;
+
+                // Reset pay button
+                payButton.disabled = true;
+                payButton.textContent = "Select an Amount to Tip";
+                delete payButton.dataset.clientSecret;
+
+                // Re-enable amount buttons
+                amountButtons.forEach(btn => {
+                    btn.disabled = false;
+                    btn.classList.remove("active")
+                });
+
+                return;
+            }
+        }
+
+        // Otherwise → create PaymentIntent first
+        const response = await fetch(startUrl, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
                 "X-CSRFToken": csrfToken
             },
             body: JSON.stringify({
-                amount: selectedAmount
+                gig_id: tipSection.dataset.gigId,
+                amount: parseInt(selectedAmount)
             })
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log("Payment initiation response", data);
-        })
-        .catch(error => {
-            console.error("Payment initiation error", error);
         });
+
+        const data = await response.json();
+        console.log("Payment initiation response", data);
+
+        if (data.client_secret) {
+            payButton.textContent = `Pay £${selectedAmount} Now`;
+            document.getElementById("card-container").classList.remove("d-none");
+            payButton.dataset.clientSecret = data.client_secret;
+
+            amountButtons.forEach(btn => btn.disabled = true);
+        }
     });
 
 });
