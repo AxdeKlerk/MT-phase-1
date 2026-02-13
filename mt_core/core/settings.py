@@ -1,3 +1,5 @@
+
+import os
 import environ
 from pathlib import Path
 import cloudinary
@@ -25,19 +27,25 @@ DEBUG = env('DEBUG')
 
 #Cloudinary configuration
 cloudinary.config(
-    cloud_name=env("CLOUDINARY_CLOUD_NAME"),
-    api_key=env("CLOUDINARY_API_KEY"),
-    api_secret=env("CLOUDINARY_API_SECRET"),
+   cloud_name=env("CLOUDINARY_CLOUD_NAME"),
+   api_key=env("CLOUDINARY_API_KEY"),
+   api_secret=env("CLOUDINARY_API_SECRET"),
 )
 
-# Square API
-#SQUARE_APPLICATION_ID = os.getenv('SQUARE_APPLICATION_ID')
-#SQUARE_ACCESS_TOKEN = os.getenv('SQUARE_ACCESS_TOKEN')
-#SQUARE_LOCATION_ID = os.getenv('SQUARE_LOCATION_ID')
-#SQUARE_SIGNATURE_KEY = os.getenv("SQUARE_SIGNATURE_KEY")
-#SQUARE_BASE_URL = os.getenv("SQUARE_BASE_URL", "https://connect.squareupsandbox.com")
+# Stripe API Keys
+STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY")
+STRIPE_PUBLISHABLE_KEY = env("STRIPE_PUBLISHABLE_KEY")
+STRIPE_WEBHOOK_SECRET = env("STRIPE_WEBHOOK_SECRET")
 
-ALLOWED_HOSTS = 'localhost', '127.0.0.1'
+
+# # Square API
+# #SQUARE_APPLICATION_ID = os.getenv('SQUARE_APPLICATION_ID')
+# #SQUARE_ACCESS_TOKEN = os.getenv('SQUARE_ACCESS_TOKEN')
+# #SQUARE_LOCATION_ID = os.getenv('SQUARE_LOCATION_ID')
+# #SQUARE_SIGNATURE_KEY = os.getenv("SQUARE_SIGNATURE_KEY")
+# #SQUARE_BASE_URL = os.getenv("SQUARE_BASE_URL", "https://connect.squareupsandbox.com")
+
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'conceptual-stridently-sadie.ngrok-free.dev']
 
 
 # Application definition
@@ -86,7 +94,6 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
 DATABASES = {
     'default': {
@@ -97,12 +104,11 @@ DATABASES = {
 
 
 # Password validation
-# https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
+     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
     },
@@ -131,5 +137,4 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
-
 

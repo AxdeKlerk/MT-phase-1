@@ -1,4 +1,7 @@
 import json
+import stripe
+from django.conf import settings
+from django.http import HttpResponse
 from multiprocessing import context
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
@@ -6,6 +9,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import get_object_or_404, render
 from .models import Venue, Gig, Artist, Payment
 from datetime import date
+from decimal import Decimal
+
+stripe.api_key = settings.STRIPE_SECRET_KEY
 
 def date_page(request, venue_slug, year, month, day):
     venue = get_object_or_404(Venue, slug=venue_slug)
@@ -96,4 +102,32 @@ def start_payment(request):
     return JsonResponse({"status": "success", "message": "Payment initiated successfully"})
 
 
+@csrf_exempt
+def create_payment_intent(request):
+    if request.method == "POST":
+        gig_id = request.POST.get("gig_id")
+        amount = request.POST.get("amount")
 
+        if not gig_id or not amount:
+            return JsonResponse({"error": "Missing data"}, status=400)
+
+        try:
+            amount_decimal = Decimal(amount)
+            amount_pence = int(amount_decimal * 100)
+        except:
+            return JsonResponse({"error": "Invalid amount"}, status=400)
+
+        intent = stripe.PaymentIntent.create(
+            amount=amount_pence,
+            currency="gbp",
+            payment_method_types=["card"],
+            metadata={
+                "gig_id": gig_id
+            }
+        )
+
+        return JsonResponse({
+            "client_secret": intent.client_secret
+        })
+
+    return JsonResponse({"error": "Invalid request"}, status=400)
