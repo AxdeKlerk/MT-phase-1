@@ -50,7 +50,9 @@
         data-start-url="{% url 'gigs:start_payment' %}"
         data-csrf="{{ csrf_token }}"> 
         <div class="col">
-            <div class="tip-section text-center">
+            <div class="tip-section text-center" 
+                data-gig-id="{{ gig.id }}"
+                data-cover-fees="{{ cover_processing_fees|yesno:'true,false' }}">
 
                 <!-- Confirmation text -->
                 <p id="tip-confirmation" class="text-center mt-3 d-none"></p>
@@ -61,9 +63,20 @@
                 </button>
 
                 <!-- Stripe Card Element -->
-                <div id="card-container" class="mt-4 d-none">
-                    <p>Enter your card details to complete you tip</p>
-                    <div id="card-element" class="form-control"></div>
+                <div id="card-container" class="mt-4 d-none align-self-center">
+                    <p>Please enter your card details</p>
+                    <div class="mb-3">
+                        <div id="card-number"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div id="card-expiry"></div>
+                        </div>
+                        <div class="col-6">
+                            <div id="card-cvc"></div>
+                        </div>
+                    </div>
+                    <div id="wallet-button-container" class="mt-3"></div>
                     <div id="card-errors" class="text-danger mt-2"></div>
                 </div>
 

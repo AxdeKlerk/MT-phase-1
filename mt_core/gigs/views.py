@@ -51,7 +51,8 @@ def tip_page(request, gig_id):
         "gig_date": gig.gig_date,
         "amounts": [2, 5, 10],  # placeholder amounts
         "fee_message": fee_message,
-        "STRIPE_PUBLIC_KEY": settings.STRIPE_PUBLISHABLE_KEY
+        "STRIPE_PUBLIC_KEY": settings.STRIPE_PUBLISHABLE_KEY,
+        "cover_processing_fees": gig.cover_processing_fees,
     }
 
     return render(request, "gigs/tip_page.html", context)
@@ -88,25 +89,42 @@ def start_payment(request):
     except json.JSONDecodeError:
         return JsonResponse({"error": "Invalid JSON"}, status=400)
 
-    if not gig_id or not amount:
+    if not gig_id or amount is None:
         return JsonResponse({"error": "Missing data"}, status=400)
 
     # Validate Gig
-    gig = get_object_or_404(Gig.objects.select_related("artist"), pk=gig_id)
+    gig = get_object_or_404(
+        Gig.objects.select_related("artist"),
+        pk=gig_id
+    )
 
     # Enforce Business Rules
     if not gig.artist.is_active:
         return JsonResponse({"error": "Artist is not active"}, status=400)
 
-    if amount not in [2, 5, 10]:
-        return JsonResponse({"error": "Invalid tip amount"}, status=400)
-
+    # Convert amount safely
     try:
-        amount_decimal = Decimal(amount)
-        amount_pence = int(amount_decimal * 100)
+        amount_decimal = Decimal(str(amount))
     except:
         return JsonResponse({"error": "Invalid amount format"}, status=400)
 
+    # Validate allowed tip amounts
+    allowed_amounts = [Decimal("2"), Decimal("5"), Decimal("10")]
+    if amount_decimal not in allowed_amounts:
+        return JsonResponse({"error": "Invalid tip amount"}, status=400)
+
+    # Calculate fee and total
+    if not gig.cover_processing_fees:
+        fee = (amount_decimal * Decimal("0.015")) + Decimal("0.20")
+        total = amount_decimal + fee
+    else:
+        fee = Decimal("0.00")
+        total = amount_decimal
+
+    # Convert to pence
+    amount_pence = int((total * 100).to_integral_value())
+
+    # Create PaymentIntent
     intent = stripe.PaymentIntent.create(
         amount=amount_pence,
         currency="gbp",
@@ -116,8 +134,11 @@ def start_payment(request):
         }
     )
 
+    # Return response
     return JsonResponse({
-        "client_secret": intent.client_secret
+        "client_secret": intent.client_secret,
+        "total_amount": str(total.quantize(Decimal("0.01"))),
+        "fee_amount": str(fee.quantize(Decimal("0.01")))
     })
 
 

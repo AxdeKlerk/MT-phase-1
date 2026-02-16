@@ -11,7 +11,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const amountButtons = document.querySelectorAll(".tip-btn");
     const confirmationText = document.getElementById("tip-confirmation");
-    const clearButton = document.getElementById("clear-tip");
     const payButton = document.getElementById("pay-btn");
     const payConfirmation = document.getElementById("pay-confirmation");
     const feeMessage = document.getElementById("fee-message");
@@ -19,15 +18,64 @@ document.addEventListener("DOMContentLoaded", () => {
     // Initialise Stripe
     const stripe = Stripe(window.STRIPE_PUBLIC_KEY);
     const elements = stripe.elements();
+    const style = {
+        base: {
+            color: "#000000",
+            fontFamily: "Geist Mono, monospace",
+            fontSize: "16px",
+            "::placeholder": {
+            color: "#555555"
+            }
+        },
+        invalid: {
+            color: "#E63946"
+        }
+    };
+    const cardNumber = elements.create("cardNumber", { style: style });
+    const cardExpiry = elements.create("cardExpiry", { style: style });
+    const cardCvc = elements.create("cardCvc", { style: style });
 
-    const card = elements.create("card");
-    card.mount("#card-element");
-
+    cardNumber.mount("#card-number");
+    cardExpiry.mount("#card-expiry");
+    cardCvc.mount("#card-cvc");
 
     // Amount selection
     amountButtons.forEach(button => {
         button.addEventListener("click", () => {
             selectedAmount = button.dataset.amount;
+
+        // ===== Wallet Setup =====
+        const walletContainer = document.getElementById("wallet-button-container");
+
+        // Clear any previous wallet button
+        walletContainer.innerHTML = "";
+
+        // Create paymentRequest using selected amount
+        const paymentRequest = stripe.paymentRequest({
+            country: "GB",
+            currency: "gbp",
+            total: {
+                label: `Tip £${selectedAmount}`,
+                amount: parseInt(selectedAmount) * 100,
+            },
+            requestPayerName: true,
+            requestPayerEmail: true,
+        });
+
+        const prButton = elements.create("paymentRequestButton", {
+            paymentRequest,
+        });
+
+        // Check if wallet is supported
+        paymentRequest.canMakePayment().then((result) => {
+            console.log("Wallet support result:", result);
+            if (result) {
+                walletContainer.classList.remove("d-none");
+                prButton.mount("#wallet-button-container");
+            } else {
+                walletContainer.classList.add("d-none");
+            }
+        });
 
             amountButtons.forEach(btn => btn.classList.remove("active"));
             button.classList.add("active");
@@ -43,19 +91,8 @@ document.addEventListener("DOMContentLoaded", () => {
             if (feeMessage && feeMessage.textContent.trim() !== "") {
                 feeMessage.classList.remove("d-none");
             }
-
-            /* clearButton.classList.remove("d-none");*/
         });
     });
-
-    // Clear selection
-    /*clearButton.addEventListener("click", () => {
-        selectedAmount = null;
-
-        amountButtons.forEach(btn => btn.classList.remove("active"));
-        confirmationText.classList.add("d-none");
-        clearButton.classList.add("d-none");
-    });*/
 
     // Pay button
     payButton.addEventListener("click", async () => {
@@ -70,7 +107,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 payButton.dataset.clientSecret,
                 {
                     payment_method: {
-                        card: card
+                        card: cardNumber
                     }
                 }
             );
@@ -115,7 +152,7 @@ document.addEventListener("DOMContentLoaded", () => {
             },
             body: JSON.stringify({
                 gig_id: tipSection.dataset.gigId,
-                amount: parseInt(selectedAmount)
+                amount: parseFloat(selectedAmount)             
             })
         });
 
@@ -123,10 +160,9 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log("Payment initiation response", data);
 
         if (data.client_secret) {
-            payButton.textContent = `Pay £${selectedAmount} Now`;
+            payButton.textContent = `Pay £${data.total_amount} Now`;
             document.getElementById("card-container").classList.remove("d-none");
             payButton.dataset.clientSecret = data.client_secret;
-
             amountButtons.forEach(btn => btn.disabled = true);
         }
     });
