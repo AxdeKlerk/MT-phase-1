@@ -91,3 +91,78 @@ class Payment(models.Model):
         return f"Payment of £{self.amount} for {self.artist} at {self.venue} on {self.gig_date}"
 
 
+class ScanEvent(models.Model):
+
+    FORMAT_CHOICES = [
+        ("poster", "Poster"),
+        ("card", "Card"),
+    ]
+
+    gig = models.ForeignKey(
+        Gig,
+        on_delete=models.CASCADE,
+        related_name="scan_events"
+    )
+
+    session_key = models.CharField(max_length=40)
+
+    format = models.CharField(
+        max_length=20,
+        choices=FORMAT_CHOICES
+    )
+
+    # Snapshot at time of scan
+    fee_model = models.CharField(max_length=20)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["gig", "session_key"],
+                name="unique_scan_per_session_per_gig"
+            )
+        ]
+
+    def __str__(self):
+        return f"Scan - {self.gig} - {self.session_key}"
+
+
+class PaymentIntent(models.Model):
+
+    STATUS_CHOICES = [
+        ("created", "Created"),
+        ("succeeded", "Succeeded"),
+        ("failed", "Failed"),
+    ]
+
+    scan_event = models.ForeignKey(
+        ScanEvent,
+        on_delete=models.CASCADE,
+        related_name="payment_intents"
+    )
+
+    stripe_payment_intent_id = models.CharField(
+        max_length=255,
+        unique=True
+    )
+
+    amount = models.PositiveIntegerField(
+        help_text="Amount in pence"
+    )
+
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default="created"
+    )
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    completed_at = models.DateTimeField(
+        null=True,
+        blank=True
+    )
+
+    def __str__(self):
+        return f"{self.stripe_payment_intent_id} - {self.status}"

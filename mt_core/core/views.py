@@ -3,10 +3,11 @@ from django.conf import settings
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import redirect
-from gigs.models import Gig, Payment
+from gigs.models import Gig, Payment, PaymentIntent
 from datetime import date
 from decimal import Decimal
 from django.db import IntegrityError
+from django.utils import timezone
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
@@ -54,11 +55,22 @@ def stripe_webhook(request):
         amount_received = payment_intent["amount_received"]  # in pence
         metadata = payment_intent.get("metadata", {})
         gig_id = metadata.get("gig_id")
+        processor_id = payment_intent["id"]
 
-        print("E3 CONFIRMED")
-        print("Processor ID:", processor_id)
-        print("Amount (pence):", amount_received)
-        print("Gig ID from metadata:", gig_id)
+        print("Looking for PaymentIntent with ID:", processor_id)
+
+        # Update PaymentIntent tracking record
+        pi = PaymentIntent.objects.filter(
+            stripe_payment_intent_id=processor_id
+        ).first()
+
+        if pi:
+            pi.status = "succeeded"
+            pi.completed_at = timezone.now()
+            pi.save()
+
+        else:
+            print("PaymentIntent NOT FOUND")
 
         # Idempotency check
         if Payment.objects.filter(processor_id=processor_id).exists():
@@ -74,7 +86,7 @@ def stripe_webhook(request):
         except Gig.DoesNotExist:
             print(f"Gig {gig_id} not found")
             return HttpResponse(status=400)
-
+        
         # Create Payment record
         try:
             Payment.objects.create(

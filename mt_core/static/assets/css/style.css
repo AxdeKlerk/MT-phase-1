@@ -160,6 +160,11 @@ hr {
     font-size: 0.9rem;
 }
 
+/* Phase 1 Report */
+.report-container {
+    margin-top: 80px;
+}
+
 /* Media Queries */
 @media (max-width: 330px) {
     .artist-row {
