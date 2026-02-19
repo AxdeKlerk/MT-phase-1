@@ -1,5 +1,5 @@
-
 import os
+from urllib.parse import urlparse
 import environ
 from pathlib import Path
 import cloudinary
@@ -94,17 +94,26 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 
 # Database
+#DATABASES = {
+#   "default": env.db(default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}")
+#}
+
+#DATABASES["default"]["OPTIONS"] = {
+#    "sslmode": "require",
+#}
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    "default": env.db(default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}")
 }
+
+if DATABASES["default"]["ENGINE"] == "django.db.backends.postgresql":
+    DATABASES["default"]["OPTIONS"] = {
+        "sslmode": "require",
+    }
+
 
 
 # Password validation
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
