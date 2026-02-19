@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}{{ artist.name }}{% endblock %}
+{% block title %}Tip: {{ artist.name }}{% endblock %}
 
 {% block extra_head %}
     <script>window.STRIPE_PUBLIC_KEY = "{{ STRIPE_PUBLIC_KEY }}";</script>
