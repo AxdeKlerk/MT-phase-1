@@ -49,6 +49,32 @@
     {% block content %}{% endblock %}        
     </main>
 
+    <!-- About Trial Modal -->
+    <div class="modal fade" id="aboutModal" tabindex="-1" aria-labelledby="aboutModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-black text-white border-0">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title" id="aboutModalLabel">About This Trial</h5>
+                    <button type="button" class="btn-close btn-close-white end-0 me-3" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body small text-center">
+                    <p>
+                    MOSHTIP<sup>TM</sup> is a live tipping trial supporting artists at ROXOFF.
+                    </p>
+                    <p>
+                    Payments are processed securely via Stripe.
+                    </p>
+                    <p>
+                    The artist receives 100% of your tip.
+                    </p>
+                    <p class="mb-0">
+                    No personal data is stored unless you choose to link your details for ease of use over the two-day festival.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Footer -->
 
     <!-- Include JavaScript files -->

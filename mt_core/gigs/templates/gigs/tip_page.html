@@ -17,6 +17,11 @@
             <h1>{{ venue.name }}</h1>
             <p>{{ gig_date|date:"d M Y" }}</p>
             <p class="fs-6">Artist gets 100% of your tip!</p>
+            <p class="small text-muted">
+                <a href="#" data-bs-toggle="modal" data-bs-target="#aboutModal" class="whats-this-link">
+                    What's this?
+                </a>
+            </p>
         </div>
 
         <!-- Back Link -->
@@ -57,10 +62,10 @@
                 <!-- Confirmation text -->
                 <p id="tip-confirmation" class="text-center mt-3 d-none"></p>
 
-                <!-- Clear option -->
+                <!-- Clear option
                 <button id="clear-tip" class="btn btn-link d-none">
                     Change amount
-                </button>
+                </button> -->
 
                 <!-- Stripe Card Element -->
                 <div id="card-container" class="mt-4 d-none align-self-center">

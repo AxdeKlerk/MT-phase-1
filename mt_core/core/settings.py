@@ -45,13 +45,12 @@ STRIPE_WEBHOOK_SECRET = env("STRIPE_WEBHOOK_SECRET")
 # #SQUARE_SIGNATURE_KEY = os.getenv("SQUARE_SIGNATURE_KEY")
 # #SQUARE_BASE_URL = os.getenv("SQUARE_BASE_URL", "https://connect.squareupsandbox.com")
 
-ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default = ["localhost"])
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default = ["localhost", '127.0.0.1'])
 
 CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS", default=[])
 
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -96,14 +95,6 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 
 # Database
-#DATABASES = {
-#   "default": env.db(default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}")
-#}
-
-#DATABASES["default"]["OPTIONS"] = {
-#    "sslmode": "require",
-#}
-
 DATABASES = {
     "default": env.db(default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}")
 }
@@ -112,7 +103,6 @@ if DATABASES["default"]["ENGINE"] == "django.db.backends.postgresql":
     DATABASES["default"]["OPTIONS"] = {
         "sslmode": "require",
     }
-
 
 
 # Password validation
@@ -145,7 +135,6 @@ STATICFILES_DIRS = [
     BASE_DIR / 'static',
     BASE_DIR / "mt_core" / "static",
 ]
-
 
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 

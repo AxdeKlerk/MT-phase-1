@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Phase 1 Report{% endblock %}
+
+{% block content %}
+<div class="container report-container">
+
+    <h2>Phase 1 Report</h2>
+
+    <hr>
+
+    <h3>Condition Metrics</h3>
+
+    {% for row in condition_data %}
+        <div class="mb-3">
+            <strong>Condition:</strong> {{ row.condition }}<br>
+            Scans: {{ row.scan_count }}<br>
+            Intents: {{ row.intent_count }}<br>
+            Successes: {{ row.success_count }}<br>
+            Scan → Intent: {{ row.scan_to_intent|floatformat:2 }}%<br>
+            Scan → Success: {{ row.scan_to_success|floatformat:2 }}%<br>
+            Tips per 100 Scans: {{ row.tips_per_100_scans|floatformat:2 }}<br>
+            Avg Tip: £{{ row.avg_tip|floatformat:2 }}
+        </div>
+        <hr>
+    {% endfor %}
+
+    <h3>Artist Totals</h3>
+
+    {% for artist in artist_totals %}
+        <div class="mb-2">
+            <strong>{{ artist.gig__artist__name }}</strong><br>
+            Total Tips: {{ artist.total_tips }}<br>
+            Total Value: £{{ artist.total_value|floatformat:2 }}<br>
+            Average Tip: £{{ artist.average_tip|floatformat:2 }}
+        </div>
+        <hr>
+    {% endfor %}
+
+    <h3>Tip Log</h3>
+
+    {% for tip in tip_log %}
+        <div class="mb-2">
+            {{ tip.gig.artist.name }} —
+            £{{ tip.amount }} —
+            {{ tip.payment_date }}
+        </div>
+    {% endfor %}
+
+    <h3>Time of Day Distribution</h3>
+
+    {% for row in time_distribution %}
+        <div class="mb-2">
+            {{ row.hour }}:00 —
+            Tips: {{ row.tip_count }} —
+            Total: £{{ row.total_value|floatformat:2 }}
+        </div>
+    {% empty %}
+        <p>No successful payments yet.</p>
+    {% endfor %}
+
+</div>
+{% endblock %}

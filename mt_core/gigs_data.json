@@ -1,0 +1,742 @@
+[
+{
+  "model": "gigs.artist",
+  "pk": 1,
+  "fields": {
+    "name": "WOLFSBANE",
+    "payment_reference": null,
+    "is_active": true,
+    "created_at": "2026-02-03T12:21:47.742Z",
+    "logo": "image/upload/v1770619874/y6kg47d2cdn6u8ry9yxc.png"
+  }
+},
+{
+  "model": "gigs.artist",
+  "pk": 2,
+  "fields": {
+    "name": "DAXX & ROXANNE",
+    "payment_reference": null,
+    "is_active": true,
+    "created_at": "2026-02-03T12:22:04.515Z",
+    "logo": "image/upload/v1770469421/mtb62vlmf6yiw0h3peyh.jpg"
+  }
+},
+{
+  "model": "gigs.artist",
+  "pk": 3,
+  "fields": {
+    "name": "THIS HOUSE WE BUILT",
+    "payment_reference": null,
+    "is_active": true,
+    "created_at": "2026-02-03T12:23:27.487Z",
+    "logo": "image/upload/v1771159750/lgmuir6th2jifotjunmk.png"
+  }
+},
+{
+  "model": "gigs.artist",
+  "pk": 4,
+  "fields": {
+    "name": "CTOAN",
+    "payment_reference": null,
+    "is_active": true,
+    "created_at": "2026-02-07T11:03:19.865Z",
+    "logo": "image/upload/v1770638716/kh72g90ipqk3su4e59kf.png"
+  }
+},
+{
+  "model": "gigs.artist",
+  "pk": 5,
+  "fields": {
+    "name": "JEHENNA",
+    "payment_reference": null,
+    "is_active": true,
+    "created_at": "2026-02-07T11:03:29.743Z",
+    "logo": "image/upload/v1770619503/vu6yl7mq4lngymtdmqvm.png"
+  }
+},
+{
+  "model": "gigs.artist",
+  "pk": 6,
+  "fields": {
+    "name": "PLANET FATALE",
+    "payment_reference": null,
+    "is_active": true,
+    "created_at": "2026-02-07T11:03:39.642Z",
+    "logo": "image/upload/v1770469288/pwbmbdxnx5vdrww1zv8u.jpg"
+  }
+},
+{
+  "model": "gigs.artist",
+  "pk": 7,
+  "fields": {
+    "name": "MANORS",
+    "payment_reference": null,
+    "is_active": false,
+    "created_at": "2026-02-07T11:03:44.548Z",
+    "logo": "image/upload/v1770639414/wg4nupxls3a0fxjt1e8a.png"
+  }
+},
+{
+  "model": "gigs.artist",
+  "pk": 8,
+  "fields": {
+    "name": "THE SOUL REVIVAL",
+    "payment_reference": null,
+    "is_active": true,
+    "created_at": "2026-02-07T11:03:55.581Z",
+    "logo": "image/upload/v1770619709/dq99wev8clr6hyynjhrw.jpg"
+  }
+},
+{
+  "model": "gigs.artist",
+  "pk": 9,
+  "fields": {
+    "name": "UNTIL 9",
+    "payment_reference": null,
+    "is_active": true,
+    "created_at": "2026-02-07T11:04:04.418Z",
+    "logo": "image/upload/v1770638579/bxbky6oacjbtf3p1p2oz.jpg"
+  }
+},
+{
+  "model": "gigs.artist",
+  "pk": 10,
+  "fields": {
+    "name": "LIBERTY SLAVES",
+    "payment_reference": null,
+    "is_active": true,
+    "created_at": "2026-02-07T11:04:16.720Z",
+    "logo": "image/upload/v1770622637/vqgkuiqa1tfukqdqjale.jpg"
+  }
+},
+{
+  "model": "gigs.artist",
+  "pk": 11,
+  "fields": {
+    "name": "THE MIDNIGHT DEVILS",
+    "payment_reference": null,
+    "is_active": true,
+    "created_at": "2026-02-07T11:04:27.512Z",
+    "logo": "image/upload/v1770620598/b77ukxrzpnfvrb3tm9lk.jpg"
+  }
+},
+{
+  "model": "gigs.artist",
+  "pk": 12,
+  "fields": {
+    "name": "JULIET'S NOT DEAD",
+    "payment_reference": null,
+    "is_active": true,
+    "created_at": "2026-02-07T11:04:41.083Z",
+    "logo": "image/upload/v1770620846/iifmt8y7f5notu4aaa0b.png"
+  }
+},
+{
+  "model": "gigs.artist",
+  "pk": 13,
+  "fields": {
+    "name": "MARISA AND THE MOTHS",
+    "payment_reference": null,
+    "is_active": true,
+    "created_at": "2026-02-07T11:04:51.490Z",
+    "logo": "image/upload/v1770619447/jzei1go1dhyhiugykcro.png"
+  }
+},
+{
+  "model": "gigs.artist",
+  "pk": 14,
+  "fields": {
+    "name": "HEKZ",
+    "payment_reference": null,
+    "is_active": true,
+    "created_at": "2026-02-07T12:03:40.538Z",
+    "logo": "image/upload/v1770620701/dhhapbnqlzyv39klxjqv.jpg"
+  }
+},
+{
+  "model": "gigs.artist",
+  "pk": 15,
+  "fields": {
+    "name": "PRYMA",
+    "payment_reference": null,
+    "is_active": true,
+    "created_at": "2026-02-15T14:01:33.617Z",
+    "logo": "image/upload/v1771164387/ac94xnxjoyqemtpwq3c8.png"
+  }
+},
+{
+  "model": "gigs.venue",
+  "pk": 1,
+  "fields": {
+    "name": "Brickmakers Arms",
+    "slug": "brickmakers",
+    "is_active": true,
+    "created_at": "2026-02-03T12:20:43.304Z"
+  }
+},
+{
+  "model": "gigs.venue",
+  "pk": 2,
+  "fields": {
+    "name": "Epic Studios",
+    "slug": "epicstudios",
+    "is_active": true,
+    "created_at": "2026-02-03T12:20:57.755Z"
+  }
+},
+{
+  "model": "gigs.gig",
+  "pk": 1,
+  "fields": {
+    "artist": 1,
+    "venue": 2,
+    "gig_date": "2026-05-03",
+    "created_at": "2026-02-03T12:22:26.215Z",
+    "play_order": 1,
+    "cover_processing_fees": false
+  }
+},
+{
+  "model": "gigs.gig",
+  "pk": 2,
+  "fields": {
+    "artist": 2,
+    "venue": 1,
+    "gig_date": "2026-05-02",
+    "created_at": "2026-02-03T12:22:36.937Z",
+    "play_order": 1,
+    "cover_processing_fees": true
+  }
+},
+{
+  "model": "gigs.gig",
+  "pk": 3,
+  "fields": {
+    "artist": 3,
+    "venue": 2,
+    "gig_date": "2026-05-03",
+    "created_at": "2026-02-03T12:23:42.882Z",
+    "play_order": 6,
+    "cover_processing_fees": false
+  }
+},
+{
+  "model": "gigs.gig",
+  "pk": 4,
+  "fields": {
+    "artist": 4,
+    "venue": 1,
+    "gig_date": "2026-05-02",
+    "created_at": "2026-02-07T11:05:12.373Z",
+    "play_order": 7,
+    "cover_processing_fees": true
+  }
+},
+{
+  "model": "gigs.gig",
+  "pk": 5,
+  "fields": {
+    "artist": 5,
+    "venue": 1,
+    "gig_date": "2026-05-02",
+    "created_at": "2026-02-07T11:05:21.938Z",
+    "play_order": 6,
+    "cover_processing_fees": true
+  }
+},
+{
+  "model": "gigs.gig",
+  "pk": 6,
+  "fields": {
+    "artist": 6,
+    "venue": 1,
+    "gig_date": "2026-05-02",
+    "created_at": "2026-02-07T11:05:33.033Z",
+    "play_order": 4,
+    "cover_processing_fees": true
+  }
+},
+{
+  "model": "gigs.gig",
+  "pk": 8,
+  "fields": {
+    "artist": 8,
+    "venue": 1,
+    "gig_date": "2026-05-02",
+    "created_at": "2026-02-07T11:06:00.299Z",
+    "play_order": 3,
+    "cover_processing_fees": true
+  }
+},
+{
+  "model": "gigs.gig",
+  "pk": 9,
+  "fields": {
+    "artist": 9,
+    "venue": 1,
+    "gig_date": "2026-05-02",
+    "created_at": "2026-02-07T11:06:13.068Z",
+    "play_order": 2,
+    "cover_processing_fees": true
+  }
+},
+{
+  "model": "gigs.gig",
+  "pk": 10,
+  "fields": {
+    "artist": 10,
+    "venue": 2,
+    "gig_date": "2026-05-03",
+    "created_at": "2026-02-07T11:06:30.423Z",
+    "play_order": 5,
+    "cover_processing_fees": false
+  }
+},
+{
+  "model": "gigs.gig",
+  "pk": 11,
+  "fields": {
+    "artist": 11,
+    "venue": 2,
+    "gig_date": "2026-05-03",
+    "created_at": "2026-02-07T11:06:39.426Z",
+    "play_order": 4,
+    "cover_processing_fees": false
+  }
+},
+{
+  "model": "gigs.gig",
+  "pk": 12,
+  "fields": {
+    "artist": 12,
+    "venue": 2,
+    "gig_date": "2026-05-03",
+    "created_at": "2026-02-07T11:06:48.461Z",
+    "play_order": 3,
+    "cover_processing_fees": false
+  }
+},
+{
+  "model": "gigs.gig",
+  "pk": 13,
+  "fields": {
+    "artist": 13,
+    "venue": 2,
+    "gig_date": "2026-05-03",
+    "created_at": "2026-02-07T11:06:59.976Z",
+    "play_order": 2,
+    "cover_processing_fees": false
+  }
+},
+{
+  "model": "gigs.gig",
+  "pk": 14,
+  "fields": {
+    "artist": 14,
+    "venue": 2,
+    "gig_date": "2026-05-03",
+    "created_at": "2026-02-07T12:05:58.474Z",
+    "play_order": 7,
+    "cover_processing_fees": false
+  }
+},
+{
+  "model": "gigs.gig",
+  "pk": 15,
+  "fields": {
+    "artist": 15,
+    "venue": 1,
+    "gig_date": "2026-05-02",
+    "created_at": "2026-02-15T14:02:35.686Z",
+    "play_order": 5,
+    "cover_processing_fees": true
+  }
+},
+{
+  "model": "gigs.payment",
+  "pk": 1,
+  "fields": {
+    "gig": 1,
+    "amount": "5.00",
+    "payment_date": "2026-02-13T15:22:26.454Z",
+    "reference": null,
+    "processor_id": "pi_3T0OB6DMz03mBnFP1SyC6pdB",
+    "status": "successful"
+  }
+},
+{
+  "model": "gigs.payment",
+  "pk": 2,
+  "fields": {
+    "gig": 2,
+    "amount": "10.00",
+    "payment_date": "2026-02-13T16:09:04.955Z",
+    "reference": null,
+    "processor_id": "pi_3T0OutDMz03mBnFP0niypoMx",
+    "status": "successful"
+  }
+},
+{
+  "model": "gigs.payment",
+  "pk": 3,
+  "fields": {
+    "gig": 2,
+    "amount": "5.00",
+    "payment_date": "2026-02-13T16:10:16.319Z",
+    "reference": null,
+    "processor_id": "pi_3T0Ow3DMz03mBnFP1Yzo9rvB",
+    "status": "successful"
+  }
+},
+{
+  "model": "gigs.payment",
+  "pk": 4,
+  "fields": {
+    "gig": 2,
+    "amount": "2.00",
+    "payment_date": "2026-02-13T16:11:19.467Z",
+    "reference": null,
+    "processor_id": "pi_3T0OxIDMz03mBnFP0efZvki1",
+    "status": "successful"
+  }
+},
+{
+  "model": "gigs.payment",
+  "pk": 5,
+  "fields": {
+    "gig": 2,
+    "amount": "10.00",
+    "payment_date": "2026-02-13T16:27:55.020Z",
+    "reference": null,
+    "processor_id": "pi_3T0PDNDMz03mBnFP1KdtdUmS",
+    "status": "successful"
+  }
+},
+{
+  "model": "gigs.payment",
+  "pk": 6,
+  "fields": {
+    "gig": 2,
+    "amount": "5.00",
+    "payment_date": "2026-02-13T16:42:37.991Z",
+    "reference": null,
+    "processor_id": "pi_3T0PP6DMz03mBnFP0iYXSheH",
+    "status": "successful"
+  }
+},
+{
+  "model": "gigs.payment",
+  "pk": 7,
+  "fields": {
+    "gig": 2,
+    "amount": "5.00",
+    "payment_date": "2026-02-13T16:43:04.705Z",
+    "reference": null,
+    "processor_id": "pi_3T0PRmDMz03mBnFP2qJpYcGx",
+    "status": "successful"
+  }
+},
+{
+  "model": "gigs.payment",
+  "pk": 8,
+  "fields": {
+    "gig": 2,
+    "amount": "5.00",
+    "payment_date": "2026-02-13T16:48:03.043Z",
+    "reference": null,
+    "processor_id": "pi_3T0PWwDMz03mBnFP0gBt3bZ5",
+    "status": "successful"
+  }
+},
+{
+  "model": "gigs.payment",
+  "pk": 9,
+  "fields": {
+    "gig": 9,
+    "amount": "10.00",
+    "payment_date": "2026-02-13T16:48:50.000Z",
+    "reference": null,
+    "processor_id": "pi_3T0PXhDMz03mBnFP2TRFBX2p",
+    "status": "successful"
+  }
+},
+{
+  "model": "gigs.payment",
+  "pk": 10,
+  "fields": {
+    "gig": 9,
+    "amount": "10.00",
+    "payment_date": "2026-02-13T16:56:50.280Z",
+    "reference": null,
+    "processor_id": "pi_3T0PfODMz03mBnFP0Ce7z3dB",
+    "status": "successful"
+  }
+},
+{
+  "model": "gigs.payment",
+  "pk": 11,
+  "fields": {
+    "gig": 9,
+    "amount": "10.00",
+    "payment_date": "2026-02-13T17:05:14.842Z",
+    "reference": null,
+    "processor_id": "pi_3T0PnVDMz03mBnFP1G0Iwqyh",
+    "status": "successful"
+  }
+},
+{
+  "model": "gigs.payment",
+  "pk": 12,
+  "fields": {
+    "gig": 9,
+    "amount": "5.00",
+    "payment_date": "2026-02-13T17:13:49.383Z",
+    "reference": null,
+    "processor_id": "pi_3T0PvpDMz03mBnFP2flOu4Iv",
+    "status": "successful"
+  }
+},
+{
+  "model": "gigs.payment",
+  "pk": 13,
+  "fields": {
+    "gig": 4,
+    "amount": "10.00",
+    "payment_date": "2026-02-18T09:33:50.684Z",
+    "reference": null,
+    "processor_id": "pi_3T278UDMz03mBnFP0qspXNyP",
+    "status": "successful"
+  }
+},
+{
+  "model": "gigs.payment",
+  "pk": 14,
+  "fields": {
+    "gig": 4,
+    "amount": "5.00",
+    "payment_date": "2026-02-18T09:37:30.014Z",
+    "reference": null,
+    "processor_id": "pi_3T27C2DMz03mBnFP26LSqRUD",
+    "status": "successful"
+  }
+},
+{
+  "model": "gigs.payment",
+  "pk": 15,
+  "fields": {
+    "gig": 12,
+    "amount": "5.28",
+    "payment_date": "2026-02-18T09:59:03.910Z",
+    "reference": null,
+    "processor_id": "pi_3T27WtDMz03mBnFP1nDsBpOx",
+    "status": "successful"
+  }
+},
+{
+  "model": "gigs.payment",
+  "pk": 16,
+  "fields": {
+    "gig": 12,
+    "amount": "10.35",
+    "payment_date": "2026-02-18T10:07:57.778Z",
+    "reference": null,
+    "processor_id": "pi_3T27fTDMz03mBnFP1tpPCyuy",
+    "status": "successful"
+  }
+},
+{
+  "model": "gigs.scanevent",
+  "pk": 1,
+  "fields": {
+    "gig": 9,
+    "session_key": "3cs29s8ajy63xa6us3c014ykyqpjmluf",
+    "format": "poster",
+    "fee_model": "absorbed",
+    "created_at": "2026-02-18T09:09:40.533Z"
+  }
+},
+{
+  "model": "gigs.scanevent",
+  "pk": 2,
+  "fields": {
+    "gig": 8,
+    "session_key": "3cs29s8ajy63xa6us3c014ykyqpjmluf",
+    "format": "poster",
+    "fee_model": "absorbed",
+    "created_at": "2026-02-18T09:16:14.220Z"
+  }
+},
+{
+  "model": "gigs.scanevent",
+  "pk": 3,
+  "fields": {
+    "gig": 6,
+    "session_key": "3cs29s8ajy63xa6us3c014ykyqpjmluf",
+    "format": "poster",
+    "fee_model": "absorbed",
+    "created_at": "2026-02-18T09:21:31.366Z"
+  }
+},
+{
+  "model": "gigs.scanevent",
+  "pk": 4,
+  "fields": {
+    "gig": 15,
+    "session_key": "3cs29s8ajy63xa6us3c014ykyqpjmluf",
+    "format": "poster",
+    "fee_model": "absorbed",
+    "created_at": "2026-02-18T09:25:40.356Z"
+  }
+},
+{
+  "model": "gigs.scanevent",
+  "pk": 5,
+  "fields": {
+    "gig": 5,
+    "session_key": "3cs29s8ajy63xa6us3c014ykyqpjmluf",
+    "format": "poster",
+    "fee_model": "absorbed",
+    "created_at": "2026-02-18T09:28:46.870Z"
+  }
+},
+{
+  "model": "gigs.scanevent",
+  "pk": 6,
+  "fields": {
+    "gig": 4,
+    "session_key": "3cs29s8ajy63xa6us3c014ykyqpjmluf",
+    "format": "poster",
+    "fee_model": "absorbed",
+    "created_at": "2026-02-18T09:33:31.520Z"
+  }
+},
+{
+  "model": "gigs.scanevent",
+  "pk": 7,
+  "fields": {
+    "gig": 12,
+    "session_key": "3cs29s8ajy63xa6us3c014ykyqpjmluf",
+    "format": "poster",
+    "fee_model": "fan_pays",
+    "created_at": "2026-02-18T09:58:44.145Z"
+  }
+},
+{
+  "model": "gigs.scanevent",
+  "pk": 8,
+  "fields": {
+    "gig": 12,
+    "session_key": "pnmzstc4ujcj9sxp423cdbbcy8zzaj7i",
+    "format": "card",
+    "fee_model": "fan_pays",
+    "created_at": "2026-02-18T10:03:21.588Z"
+  }
+},
+{
+  "model": "gigs.scanevent",
+  "pk": 9,
+  "fields": {
+    "gig": 12,
+    "session_key": "geikaubx4ys6mvm1kmk8at9jaoem7ssr",
+    "format": "card",
+    "fee_model": "fan_pays",
+    "created_at": "2026-02-18T10:07:35.210Z"
+  }
+},
+{
+  "model": "gigs.paymentintent",
+  "pk": 1,
+  "fields": {
+    "scan_event": 2,
+    "stripe_payment_intent_id": "pi_3T26sWDMz03mBnFP1pGnNWzt",
+    "amount": 500,
+    "status": "created",
+    "created_at": "2026-02-18T09:17:05.336Z",
+    "completed_at": null
+  }
+},
+{
+  "model": "gigs.paymentintent",
+  "pk": 2,
+  "fields": {
+    "scan_event": 3,
+    "stripe_payment_intent_id": "pi_3T26wsDMz03mBnFP2d1qMZz5",
+    "amount": 1000,
+    "status": "created",
+    "created_at": "2026-02-18T09:21:35.158Z",
+    "completed_at": null
+  }
+},
+{
+  "model": "gigs.paymentintent",
+  "pk": 3,
+  "fields": {
+    "scan_event": 4,
+    "stripe_payment_intent_id": "pi_3T270uDMz03mBnFP2LhTDJtk",
+    "amount": 1000,
+    "status": "created",
+    "created_at": "2026-02-18T09:25:44.492Z",
+    "completed_at": null
+  }
+},
+{
+  "model": "gigs.paymentintent",
+  "pk": 4,
+  "fields": {
+    "scan_event": 5,
+    "stripe_payment_intent_id": "pi_3T273vDMz03mBnFP2grSaXWt",
+    "amount": 200,
+    "status": "created",
+    "created_at": "2026-02-18T09:28:51.466Z",
+    "completed_at": null
+  }
+},
+{
+  "model": "gigs.paymentintent",
+  "pk": 5,
+  "fields": {
+    "scan_event": 6,
+    "stripe_payment_intent_id": "pi_3T278UDMz03mBnFP0qspXNyP",
+    "amount": 1000,
+    "status": "succeeded",
+    "created_at": "2026-02-18T09:33:35.288Z",
+    "completed_at": "2026-02-18T09:33:50.650Z"
+  }
+},
+{
+  "model": "gigs.paymentintent",
+  "pk": 6,
+  "fields": {
+    "scan_event": 6,
+    "stripe_payment_intent_id": "pi_3T27C2DMz03mBnFP26LSqRUD",
+    "amount": 500,
+    "status": "succeeded",
+    "created_at": "2026-02-18T09:37:14.670Z",
+    "completed_at": "2026-02-18T09:37:29.997Z"
+  }
+},
+{
+  "model": "gigs.paymentintent",
+  "pk": 7,
+  "fields": {
+    "scan_event": 7,
+    "stripe_payment_intent_id": "pi_3T27WtDMz03mBnFP1nDsBpOx",
+    "amount": 528,
+    "status": "succeeded",
+    "created_at": "2026-02-18T09:58:47.622Z",
+    "completed_at": "2026-02-18T09:59:03.890Z"
+  }
+},
+{
+  "model": "gigs.paymentintent",
+  "pk": 8,
+  "fields": {
+    "scan_event": 9,
+    "stripe_payment_intent_id": "pi_3T27fTDMz03mBnFP1tpPCyuy",
+    "amount": 1035,
+    "status": "succeeded",
+    "created_at": "2026-02-18T10:07:39.708Z",
+    "completed_at": "2026-02-18T10:07:57.738Z"
+  }
+}
+]

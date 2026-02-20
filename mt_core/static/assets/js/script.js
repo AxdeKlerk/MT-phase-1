@@ -81,7 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
             button.classList.add("active");
 
             confirmationText.textContent =
-                `You are tipping £${selectedAmount} to ${artistName}`;
+                `You are tipping £${selectedAmount} to\n${artistName}`;
             confirmationText.classList.remove("d-none");
 
             payButton.disabled = false;
@@ -123,7 +123,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 document.getElementById("card-container").classList.add("d-none");
 
                 // Show thank you message
-                confirmationText.textContent = `Thank you for supporting ${artistName}!`;
+                confirmationText.textContent = `Thank you for supporting\n${artistName}!`;
 
                 // Reset selection state
                 selectedAmount = null;
