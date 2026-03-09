@@ -47,7 +47,7 @@ STRIPE_WEBHOOK_SECRET = env("STRIPE_WEBHOOK_SECRET")
 
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["localhost", '127.0.0.1', "moshtip.com", "www.moshtip.com"])
 
-CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS", default=[])
+CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS", default=["https://moshtip.com", "https://www.moshtip.com"])
 
 
 # Application definition
