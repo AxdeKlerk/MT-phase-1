@@ -142,9 +142,6 @@ sup {
 #pay-confirmation {
     white-space: pre-line;
 }
-.whats-this-link {
-    color: #f5f5f5;    
-}
 .artist-tip-row {
     display: flex;
     flex-direction: column;
