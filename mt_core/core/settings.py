@@ -45,7 +45,7 @@ STRIPE_WEBHOOK_SECRET = env("STRIPE_WEBHOOK_SECRET")
 # #SQUARE_SIGNATURE_KEY = os.getenv("SQUARE_SIGNATURE_KEY")
 # #SQUARE_BASE_URL = os.getenv("SQUARE_BASE_URL", "https://connect.squareupsandbox.com")
 
-ALLOWED_HOSTS = "ALLOWED_HOSTS", default=["localhost", '127.0.0.1', "moshtip.com", "www.moshtip.com"]
+ALLOWED_HOSTS = ["localhost", '127.0.0.1', "moshtip.com", "www.moshtip.com"]
 
 # env.list("ALLOWED_HOSTS", default=["localhost", '127.0.0.1', "moshtip.com", "www.moshtip.com"])
 
