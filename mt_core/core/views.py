@@ -21,8 +21,8 @@ def home(request):
         )
 
     if gig:
-        return redirect(f"/gigs/{gig.venue.slug}/")
-
+        return redirect("gigs:venue", venue_slug=gig.venue.slug)
+    
     return redirect("/admin/")
 
 @csrf_exempt

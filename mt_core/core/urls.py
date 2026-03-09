@@ -8,5 +8,5 @@ urlpatterns = [
     # path("", home, name="home"), for pahse 2
     path("stripe/webhook/", stripe_webhook, name="stripe-webhook"),    
     path('gigs/', include('gigs.urls')),
-    path("", RedirectView.as_view(url="/gigs/", permanent=False)),
+    path("", home),
 ]
