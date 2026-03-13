@@ -14,6 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const payButton = document.getElementById("pay-btn");
     const payConfirmation = document.getElementById("pay-confirmation");
     const feeMessage = document.getElementById("fee-message");
+    const dataMessage = document.getElementById("data-message");
 
     // Initialise Stripe
     const stripe = Stripe(window.STRIPE_PUBLIC_KEY);
@@ -90,6 +91,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (feeMessage && feeMessage.textContent.trim() !== "") {
                 feeMessage.classList.remove("d-none");
+                (dataMessage && dataMessage.textContent.trim() !== "")
+                dataMessage.classList.remove("d-none")
             }
         });
     });

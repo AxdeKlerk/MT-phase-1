@@ -43,7 +43,9 @@ def tip_page(request, gig_id):
     )
 
     if gig.cover_processing_fees:
+        data_message = "Card details are never stored.<br>Autofill saves them on your phone only."
         fee_message = "No processing fees are being charged<br>for day 1 of this pilot!"
+
     else:
         fee_message = "Payment processor fee of (1.4% + 20p)<br>applies at checkout"
 
@@ -54,7 +56,7 @@ def tip_page(request, gig_id):
         "gig_date": gig.gig_date,
         "amounts": [2, 5, 10],  # placeholder amounts
         "fee_message": fee_message,
-        "data_message": "No card details are stored unless<br>you set them up with the Autofill link",
+        "data_message": data_message,
         "STRIPE_PUBLIC_KEY": settings.STRIPE_PUBLISHABLE_KEY,
         "cover_processing_fees": gig.cover_processing_fees,
     }
