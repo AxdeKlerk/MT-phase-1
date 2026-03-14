@@ -78,6 +78,49 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
+        paymentRequest.on("paymentmethod", async (ev) => {
+            const response = await fetch(startUrl, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": csrfToken
+                },
+                body: JSON.stringify({
+                    gig_id: tipSection.dataset.gigId,
+                    amount: parseFloat(selectedAmount)
+                })
+            });
+
+        const data = await response.json();
+
+        if (!data.client_secret) {
+            ev.complete("fail");
+            return;
+        }
+
+        const { error, paymentIntent } = await stripe.confirmCardPayment(
+            data.client_secret,
+            { payment_method: ev.paymentMethod.id },
+            { handleActions: false }
+        );
+
+        if (error) {
+            ev.complete("fail");
+            document.getElementById("card-errors").textContent = error.message;
+            } 
+        
+        else {
+            ev.complete("success");
+            confirmationText.textContent = `Thank you for supporting\n${artistName}!`;
+            payButton.disabled = true;
+            payButton.textContent = "Select an Amount to Tip";
+            amountButtons.forEach(btn => {
+                btn.disabled = false;
+                btn.classList.remove("active");
+            });
+        }
+    }); 
+
             amountButtons.forEach(btn => btn.classList.remove("active"));
             button.classList.add("active");
 
