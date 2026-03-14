@@ -14,7 +14,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const payButton = document.getElementById("pay-btn");
     const payConfirmation = document.getElementById("pay-confirmation");
     const feeMessage = document.getElementById("fee-message");
-    const dataMessage = document.getElementById("data-message");
 
     // Initialise Stripe
     const stripe = Stripe(window.STRIPE_PUBLIC_KEY);
@@ -134,8 +133,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (feeMessage && feeMessage.textContent.trim() !== "") {
                 feeMessage.classList.remove("d-none");
-                (dataMessage && dataMessage.textContent.trim() !== "")
-                dataMessage.classList.remove("d-none")
             }
         });
     });
@@ -208,6 +205,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (data.client_secret) {
             payButton.textContent = `Pay £${data.total_amount} Now`;
             document.getElementById("card-container").classList.remove("d-none");
+            document.getElementById("data-message").classList.remove("d-none");
             payButton.dataset.clientSecret = data.client_secret;
             amountButtons.forEach(btn => btn.disabled = true);
         }
