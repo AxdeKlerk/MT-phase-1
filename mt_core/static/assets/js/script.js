@@ -41,10 +41,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Amount selection
     amountButtons.forEach(button => {
-        button.addEventListener("click", () => {
+        button.addEventListener("click", async () => {
             selectedAmount = button.dataset.amount;
 
-        paymentRequest.on("paymentmethod", async (ev) => {
             const response = await fetch(startUrl, {
                 method: "POST",
                 headers: {
@@ -94,10 +93,25 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });        
 
-        if (!data.client_secret) {
-            ev.complete("fail");
-            return;
-        }
+        paymentRequest.on("paymentmethod", async (ev) => {
+            const response = await fetch(startUrl, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": csrfToken
+                },
+                body: JSON.stringify({
+                    gig_id: tipSection.dataset.gigId,
+                    amount: parseFloat(selectedAmount)
+                })
+            });
+            
+            const data = await response.json();
+
+            if (!data.client_secret) {
+                ev.complete("fail");
+                return;
+            }
 
         const { error, paymentIntent } = await stripe.confirmCardPayment(
             data.client_secret,
