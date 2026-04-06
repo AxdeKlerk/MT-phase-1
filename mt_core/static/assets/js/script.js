@@ -39,6 +39,17 @@ document.addEventListener("DOMContentLoaded", () => {
     cardExpiry.mount("#card-expiry");
     cardCvc.mount("#card-cvc");
 
+    const urlParams = new URLSearchParams(window.location.search);
+    const paymentSuccess = urlParams.get("payment");
+
+    if (paymentSuccess === "success") {
+        document.getElementById("payment-ui").classList.add("d-none");
+
+        const confirmationText = document.getElementById("tip-confirmation");
+        confirmationText.textContent = "Thank you for supporting live music!";
+        confirmationText.classList.remove("d-none");
+    }    
+
     // Amount selection
     amountButtons.forEach(button => {
         button.addEventListener("click", async () => {
@@ -176,6 +187,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 payButton.disabled = false;
                 payButton.textContent = `Pay £${selectedAmount} Now`;
             } else if (paymentIntent.status === "succeeded") {
+
+                console.log("SUCCESS BLOCK HIT");
+
                 payButton.textContent = "Payment Successful";
 
                 document.getElementById("payment-ui").classList.add("d-none");
