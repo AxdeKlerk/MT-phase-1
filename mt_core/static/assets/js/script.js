@@ -105,7 +105,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     amount: parseFloat(selectedAmount)
                 })
             });
-            
+
             const data = await response.json();
 
             if (!data.client_secret) {
@@ -177,6 +177,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 payButton.textContent = `Pay £${selectedAmount} Now`;
             } else if (paymentIntent.status === "succeeded") {
                 payButton.textContent = "Payment Successful";
+
+                document.getElementById("payment-ui").classList.add("d-none");
 
                 // Hide card container
                 document.getElementById("card-container").classList.add("d-none");

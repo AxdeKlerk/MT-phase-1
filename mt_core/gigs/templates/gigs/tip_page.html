@@ -63,39 +63,41 @@
                     Change amount
                 </button> -->
 
-                <!-- Google Pay & Apple Pay Wallets -->
-                <div id="wallet-button-container" class="mt-2 mb-2 align-self-center d-none"></div>
+                <div id="payment-ui">
+                    <!-- Google Pay & Apple Pay Wallets -->
+                    <div id="wallet-button-container" class="mt-2 mb-2 align-self-center d-none"></div>
 
-                <!-- Absolute Legend Text -->
-                <p id="pay-confirmation" class="text-center"></p>
+                    <!-- Absolute Legend Text -->
+                    <p id="pay-confirmation" class="text-center"></p>
 
-                <!-- Stripe Card Element -->
-                <div id="card-container" class="mt-2 mb-2 d-none align-self-center">
-                    <p>Please enter your card details</p>
-                    <div class="mb-3">
-                        <div id="card-number"></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6">
-                            <div id="card-expiry"></div>
+                    <!-- Stripe Card Element -->
+                    <div id="card-container" class="mt-2 mb-2 d-none align-self-center">
+                        <p>Please enter your card details</p>
+                        <div class="mb-3">
+                            <div id="card-number"></div>
                         </div>
-                        <div class="col-6">
-                            <div id="card-cvc"></div>
+                        <div class="row">
+                            <div class="col-6">
+                                <div id="card-expiry"></div>
+                            </div>
+                            <div class="col-6">
+                                <div id="card-cvc"></div>
+                            </div>
                         </div>
+                        <div id="card-errors" class="text-danger mt-2"></div>
                     </div>
-                    <div id="card-errors" class="text-danger mt-2"></div>
+
+                    <!-- Data Message -->
+                    <p id="data-message" class="text-center small mt-2 mb-2">{{ data_message|safe }}</p>                
+                    
+                    <!-- Pay button -->
+                    <button id="pay-btn" class="btn cta-btn mt-1 mb-1" disabled>
+                        Select an Amount to Tip
+                    </button>
+
+                    <!-- Fee Message -->
+                    <p id="fee-message" class="text-center small mt-2 d-none">{{ fee_message|safe }}</p>
                 </div>
-
-                <!-- Data Message -->
-                <p id="data-message" class="text-center small mt-2 mb-2">{{ data_message|safe }}</p>                
-                
-                <!-- Pay button -->
-                <button id="pay-btn" class="btn cta-btn mt-1 mb-1" disabled>
-                    Select an Amount to Tip
-                </button>
-
-                <!-- Fee Message -->
-                <p id="fee-message" class="text-center small mt-2 d-none">{{ fee_message|safe }}</p>
             </div>
         </div>
     </div>
