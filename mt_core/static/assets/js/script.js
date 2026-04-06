@@ -13,7 +13,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const confirmationText = document.getElementById("tip-confirmation");
     const payButton = document.getElementById("pay-btn");
     const payConfirmation = document.getElementById("pay-confirmation");
-    const feeMessage = document.getElementById("fee-message");
 
     // Initialise Stripe
     const stripe = Stripe(window.STRIPE_PUBLIC_KEY);
@@ -137,7 +136,6 @@ document.addEventListener("DOMContentLoaded", () => {
         
         else {
             ev.complete("success");
-            confirmationText.textContent = `Thank you for supporting\n${artistName}!`;
             payButton.disabled = true;
             payButton.textContent = "Select an Amount to Tip";
             amountButtons.forEach(btn => {
@@ -156,11 +154,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             payButton.disabled = false;
             payButton.textContent = `Confirm and Tip £${selectedAmount}`;
-            payConfirmation.textContent = `You are an absolute legend!\nThank you for supporting live music.`;
-
-            if (feeMessage && feeMessage.textContent.trim() !== "") {
-                feeMessage.classList.remove("d-none");
-            }
+        
         });
     });
 
@@ -194,12 +188,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 document.getElementById("payment-ui").classList.add("d-none");
 
+                const backLink = document.getElementById("back-link");
+                backLink.classList.add("mt-3");
+                document.getElementById("tip-confirmation").after(backLink);
+                
                 // Hide card container
                 document.getElementById("card-container").classList.add("d-none");
 
                 // Show thank you message
-                confirmationText.textContent = `Thank you for supporting\n${artistName}!`;
-
+                confirmationText.innerHTML = `You are an absolute legend!<br>
+                <span class="fs-1 fw-bold" style="color: red;">${artistName}</span>;
+                <span class="fs-6 fst-italic">"Thanx for your support!"</span>`;
+                
+                payConfirmation.textContent = `Thank you for supporting live music.`; 
                 // Reset selection state
                 selectedAmount = null;
 

@@ -169,8 +169,13 @@ sup {
 #data-message {
     color: red;
 }
-#fee-message {
+.fee-message a {
+    color: #f5f5f5;
+    text-decoration: none;
+}
+.fee-message a:hover {
     color: red;
+    text-decoration: none;
 }
 
 /* Stripe API Styling */
