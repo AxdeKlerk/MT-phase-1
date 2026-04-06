@@ -159,9 +159,12 @@ def start_payment(request):
         currency="gbp",
         payment_method_types=["card"],
         metadata={
-            "gig_id": str(gig_id)
+            "gig_id": str(gig_id),
+            "artist_name": gig.artist.name
         }
     )
+
+    print("Stripe metadata:", intent.metadata)
 
     # Ensure session exists
     if not request.session.session_key:

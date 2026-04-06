@@ -1,5 +1,6 @@
 from django.urls import path
 from .views import date_page, tip_page, venue, start_payment, create_payment_intent, phase1_report
+from core.views import stripe_webhook
 
 app_name = "gigs"
 
@@ -10,4 +11,5 @@ urlpatterns = [
     path("create-payment-intent/", create_payment_intent, name="create-payment-intent"),
     path("phase1-report/", phase1_report, name="phase1_report"),
     path("<slug:venue_slug>/", venue, name="venue"),
+    path("stripe/webhook/", stripe_webhook, name="stripe_webhook"),
 ]
