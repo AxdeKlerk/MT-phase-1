@@ -148,10 +148,6 @@ document.addEventListener("DOMContentLoaded", () => {
             amountButtons.forEach(btn => btn.classList.remove("active"));
             button.classList.add("active");
 
-            confirmationText.textContent =
-                `You are tipping £${selectedAmount} to\n${artistName}`;
-            confirmationText.classList.remove("d-none");
-
             payButton.disabled = false;
             payButton.textContent = `Confirm and Tip £${selectedAmount}`;
         
@@ -238,7 +234,6 @@ document.addEventListener("DOMContentLoaded", () => {
         if (data.client_secret) {
             payButton.textContent = `Pay £${data.total_amount} Now`;
             document.getElementById("card-container").classList.remove("d-none");
-            document.getElementById("data-message").classList.remove("d-none");
             payButton.dataset.clientSecret = data.client_secret;
             amountButtons.forEach(btn => btn.disabled = true);
         }

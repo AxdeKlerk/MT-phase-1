@@ -42,15 +42,12 @@ def tip_page(request, gig_id):
         pk=gig_id
     )
 
-    data_message = "Card details aren't stored.<br>Your phone may save them for you."
-
     context = {
         "gig": gig,
         "artist": gig.artist,
         "venue": gig.venue,
         "gig_date": gig.gig_date,
         "amounts": [2, 5, 10],  # placeholder amounts
-        "data_message": data_message,
         "STRIPE_PUBLIC_KEY": settings.STRIPE_PUBLISHABLE_KEY,
         "cover_processing_fees": gig.cover_processing_fees,
     }
