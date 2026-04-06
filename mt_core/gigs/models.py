@@ -1,6 +1,7 @@
 from django.db import models
 from cloudinary.models import CloudinaryField
 from decimal import Decimal
+from django.utils.text import slugify
 
 
 class Artist(models.Model):

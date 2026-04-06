@@ -44,6 +44,23 @@ document.addEventListener("DOMContentLoaded", () => {
         button.addEventListener("click", () => {
             selectedAmount = button.dataset.amount;
 
+        paymentRequest.on("paymentmethod", async (ev) => {
+            const response = await fetch(startUrl, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": csrfToken
+                },
+                body: JSON.stringify({
+                    gig_id: tipSection.dataset.gigId,
+                    amount: parseFloat(selectedAmount)
+                })
+            });
+
+        const data = await response.json();
+
+        const totalAmount = Math.round(parseFloat(data.total_amount) * 100);
+
         // ===== Wallet Setup =====
         const walletContainer = document.getElementById("wallet-button-container");
 
@@ -56,7 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
             currency: "gbp",
             total: {
                 label: `Tip £${selectedAmount}`,
-                amount: parseInt(selectedAmount) * 100,
+                amount: totalAmount,
             },
             requestPayerName: true,
             requestPayerEmail: true,
@@ -75,22 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
             } else {
                 walletContainer.classList.add("d-none");
             }
-        });
-
-        paymentRequest.on("paymentmethod", async (ev) => {
-            const response = await fetch(startUrl, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRFToken": csrfToken
-                },
-                body: JSON.stringify({
-                    gig_id: tipSection.dataset.gigId,
-                    amount: parseFloat(selectedAmount)
-                })
-            });
-
-        const data = await response.json();
+        });        
 
         if (!data.client_secret) {
             ev.complete("fail");

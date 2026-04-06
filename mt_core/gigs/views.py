@@ -42,10 +42,10 @@ def tip_page(request, gig_id):
         pk=gig_id
     )
 
-    if gig.cover_processing_fees:
-        data_message = "Card details are never stored.<br>Autofill saves them on your phone only."
-        fee_message = "No processing fees are being charged<br>for day 1 of this pilot!"
+    data_message = "Card details are never stored.<br>Autofill saves them on your phone only."
 
+    if gig.cover_processing_fees:
+        fee_message = "No processing fees are being charged<br>for day 1 of this pilot!"
     else:
         fee_message = "Payment processor fee of (1.4% + 20p)<br>applies at checkout"
 
@@ -108,6 +108,7 @@ def venue(request, venue_slug):
     }
 
     return render(request, "gigs/date_page.html", context)
+
 
 @require_POST
 def start_payment(request):
@@ -193,37 +194,6 @@ def start_payment(request):
         "total_amount": str(total.quantize(Decimal("0.01"))),
         "fee_amount": str(fee.quantize(Decimal("0.01")))
     })
-
-
-@csrf_exempt
-def create_payment_intent(request):
-    if request.method == "POST":
-        gig_id = request.POST.get("gig_id")
-        amount = request.POST.get("amount")
-
-        if not gig_id or not amount:
-            return JsonResponse({"error": "Missing data"}, status=400)
-
-        try:
-            amount_decimal = Decimal(amount)
-            amount_pence = int(amount_decimal * 100)
-        except:
-            return JsonResponse({"error": "Invalid amount"}, status=400)
-
-        intent = stripe.PaymentIntent.create(
-            amount=amount_pence,
-            currency="gbp",
-            payment_method_types=["card"],
-            metadata={
-                "gig_id": gig_id
-            }
-        )
-
-        return JsonResponse({
-            "client_secret": intent.client_secret
-        })
-
-    return JsonResponse({"error": "Invalid request"}, status=400)
 
 
 def phase1_report(request):
