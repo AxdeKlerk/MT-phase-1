@@ -180,7 +180,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 console.log("SUCCESS BLOCK HIT");
 
-                payButton.textContent = "Payment Successful";
+                payButton.textContent = "Tip Completed";
 
                 document.getElementById("payment-ui").classList.add("d-none");
 
@@ -191,12 +191,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 // Hide card container
                 document.getElementById("card-container").classList.add("d-none");
 
-                // Show thank you message
+                // Show thank you messages
                 confirmationText.innerHTML = `You are an absolute legend!<br>
-                <span class="fs-1 fw-bold" style="color: red;">${artistName}</span>;
-                <span class="fs-6 fst-italic">"Thanx for your support!"</span>`;
+                <span class="fs-6 fst-italic">Thank you for supporting live music!</span>
+                <span class="fs-1 fw-bold mt-0" style="color: red;">${artistName}</span>`;
+                   
+                confirmationText.classList.remove("d-none");
                 
-                payConfirmation.textContent = `Thank you for supporting live music.`; 
                 // Reset selection state
                 selectedAmount = null;
 
@@ -205,10 +206,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 payButton.textContent = "Select an Amount to Tip";
                 delete payButton.dataset.clientSecret;
 
-                // Re-enable amount buttons
+                // Disable amount buttons
                 amountButtons.forEach(btn => {
-                    btn.disabled = false;
+                    btn.disabled = true;
                     btn.classList.remove("active")
+                    btn.classList.add("opacity-50"); // optional visual grey-out
                 });
 
                 return;
