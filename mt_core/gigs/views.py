@@ -12,6 +12,7 @@ from decimal import Decimal
 from django.db.models import Count, Sum, Avg, Q
 from django.utils import timezone
 from django.db.models.functions import ExtractHour
+from django.contrib.admin.views.decorators import staff_member_required
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
@@ -185,7 +186,7 @@ def start_payment(request):
         "fee_amount": str(fee.quantize(Decimal("0.01")))
     })
 
-
+@staff_member_required
 def phase1_report(request):
 
     from .models import ScanEvent, PaymentIntent, Payment
