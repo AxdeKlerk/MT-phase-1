@@ -238,6 +238,16 @@ document.addEventListener("DOMContentLoaded", () => {
             document.getElementById("card-container").classList.remove("d-none");
             payButton.dataset.clientSecret = data.client_secret;
             amountButtons.forEach(btn => btn.disabled = true);
+
+            const feeMessage = document.getElementById("fee-message");
+
+            if (data.cover_processing_fees) {
+                feeMessage.textContent = "Processing fees included for day 1";
+            } else {
+                feeMessage.textContent = "Processing fee: 1.4% + 20p added at checkout";
+            }
+
+            feeMessage.classList.remove("d-none");
         }
     });
 

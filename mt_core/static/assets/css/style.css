@@ -169,11 +169,14 @@ sup {
 #data-message {
     color: red;
 }
-.fee-message a {
+#fee-message {
+    color: red;
+}
+.modal-message a {
     color: #f5f5f5;
     text-decoration: none;
 }
-.fee-message a:hover {
+.modal-message a:hover {
     color: red;
     text-decoration: none;
 }
