@@ -142,7 +142,7 @@ document.addEventListener("DOMContentLoaded", () => {
             
             document.getElementById("tip-confirmation").textContent = "WALLET EVENT TRIGGERED";
             document.getElementById("tip-confirmation").classList.remove("d-none");
-            
+
             console.log("Wallet support result:", result);
             
             if (result) {
@@ -196,71 +196,43 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // Pay button
-    payButton.addEventListener("click", async () => {
-        if (!selectedAmount) return;
-
-        // If client secret already exists → confirm payment
-        if (payButton.dataset.clientSecret) {
-
-            document.getElementById("card-container").classList.remove("d-none");
-
-            payButton.disabled = true;
-            payButton.textContent = "Processing...";
-
-            const { error, paymentIntent } = await stripe.confirmCardPayment(
-                payButton.dataset.clientSecret,
-                {
-                    payment_method: {
-                        card: cardNumber
-                    }
-                }
-            );
-
-            if (error) {
-                document.getElementById("card-errors").textContent = error.message;
-                payButton.disabled = false;
-                payButton.textContent = `Pay £${payButton.dataset.totalAmount} Now`;
-            } else if (paymentIntent.status === "succeeded") {
-
-                console.log("SUCCESS BLOCK HIT");
-
-                payButton.textContent = "Tip Completed";
-
-                document.getElementById("payment-ui").classList.add("d-none");
-
-                const backLink = document.getElementById("back-link");
-                backLink.classList.add("mt-3");
-                document.getElementById("tip-confirmation").after(backLink);
-                
-                // Hide card container
-                document.getElementById("card-container").classList.add("d-none");
-
-                // Show thank you messages
-                confirmationText.innerHTML = `You are an absolute legend!<br>
-                <span class="fs-6 fst-italic">Thank you for supporting live music!</span>
-                <span class="fs-1 fw-bold mt-0" style="color: red;">${artistName}</span>`;
-                   
-                confirmationText.classList.remove("d-none");
-                
-                // Reset selection state
-                selectedAmount = null;
-
-                // Reset pay button
+        // Pay button
+        payButton.addEventListener("click", async () => {
+            if (!selectedAmount) return;
+    
+            // If client secret already exists → confirm payment
+            if (payButton.dataset.clientSecret) {
+    
+                document.getElementById("card-container").classList.remove("d-none");
+    
                 payButton.disabled = true;
-                payButton.textContent = "Select an Amount to Tip";
-                delete payButton.dataset.clientSecret;
-
-                // Disable amount buttons
-                amountButtons.forEach(btn => {
-                    btn.disabled = true;
-                    btn.classList.remove("active")
-                    btn.classList.add("opacity-50"); // optional visual grey-out
-                });
-
+                payButton.textContent = "Processing...";
+    
+                const { error, paymentIntent } = await stripe.confirmCardPayment(
+                    payButton.dataset.clientSecret,
+                    {
+                        payment_method: {
+                            card: cardNumber
+                        }
+                    }
+                );
+    
+                if (error) {
+                    document.getElementById("card-errors").textContent = error.message;
+                    payButton.disabled = false;
+                    payButton.textContent = `Pay £${payButton.dataset.totalAmount} Now`;
+    
+                } else if (paymentIntent) {
+    
+                    document.getElementById("tip-confirmation").textContent =
+                        "STATUS: " + paymentIntent.status;
+    
+                    document.getElementById("tip-confirmation").classList.remove("d-none");
+                }
+    
                 return;
             }
-        }
+        });
     });
-});
+
 
