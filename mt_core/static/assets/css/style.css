@@ -64,12 +64,13 @@ hr {
 }
 .modal-body {
     padding-top: 0.25rem;
+    font-size: 1rem;
 }
 .modal-title {
     margin-bottom: 0;
 }
 sup {
-    font-size: 0.5rem;
+    font-size: 0.9rem;
     top: -0.4rem;
 }
 
