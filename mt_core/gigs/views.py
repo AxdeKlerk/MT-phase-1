@@ -183,7 +183,8 @@ def start_payment(request):
     return JsonResponse({
         "client_secret": intent.client_secret,
         "total_amount": str(total.quantize(Decimal("0.01"))),
-        "fee_amount": str(fee.quantize(Decimal("0.01")))
+        "fee_amount": str(fee.quantize(Decimal("0.01"))),
+        "cover_processing_fees": gig.cover_processing_fees,
     })
 
 @staff_member_required

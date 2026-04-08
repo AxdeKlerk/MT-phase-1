@@ -5,6 +5,8 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!tipSection) return;
 
     let selectedAmount = null;
+    let walletButtonMounted = false;
+    
     const artistName = tipSection.dataset.artistName;
     const startUrl = tipSection.dataset.startUrl;
     const csrfToken = tipSection.dataset.csrf;
@@ -30,6 +32,19 @@ document.addEventListener("DOMContentLoaded", () => {
             color: "#E63946"
         }
     };
+
+    // Create paymentRequest using selected amount
+    let paymentRequest = stripe.paymentRequest({
+        country: "GB",
+        currency: "gbp",
+        total: {
+            label: `Tip`,
+            amount: 0, // Will be updated when amount is selected   
+        },
+        requestPayerName: true,
+        requestPayerEmail: true,
+    });
+
     const cardNumber = elements.create("cardNumber", { style: style });
     const cardExpiry = elements.create("cardExpiry", { style: style });
     const cardCvc = elements.create("cardCvc", { style: style });
@@ -52,79 +67,101 @@ document.addEventListener("DOMContentLoaded", () => {
     // Amount selection
     amountButtons.forEach(button => {
         button.addEventListener("click", async () => {
+            let data;
+
             selectedAmount = button.dataset.amount;
 
-            const response = await fetch(startUrl, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRFToken": csrfToken
-                },
-                body: JSON.stringify({
-                    gig_id: tipSection.dataset.gigId,
-                    amount: parseFloat(selectedAmount)
-                })
-            });
+            if (button.classList.contains("active")) {
+                return;
+            }
 
-        const data = await response.json();
+            try {
+                const response = await fetch(startUrl, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": csrfToken
+                    },
+                    body: JSON.stringify({
+                        gig_id: tipSection.dataset.gigId,
+                        amount: parseFloat(selectedAmount)
+                    })
+                });
+
+                data = await response.json();
+
+                // Update Pay button UI
+                payButton.textContent = `Pay £${data.total_amount} Now`;
+                payButton.dataset.totalAmount = data.total_amount;
+                payButton.dataset.clientSecret = data.client_secret;
+
+            } catch (error) {
+                console.error("Payment init failed:", error);
+
+                payButton.disabled = true;
+                payButton.textContent = "Error — try again";
+
+                return;
+            }
+
+        const feeMessage = document.getElementById("fee-message");
+
+        if (data.cover_processing_fees) {
+            feeMessage.textContent = "Processing fees included for day 1";
+        } else {
+            feeMessage.textContent = "Processing fee: 1.4% + 20p added at checkout";
+        }
+
+        feeMessage.classList.remove("d-none");
+
+        button.dataset.clientSecret = data.client_secret;
+        payButton.dataset.clientSecret = data.client_secret;
 
         const totalAmount = Math.round(parseFloat(data.total_amount) * 100);
+        paymentRequest.update({
+            total: {
+                label: `Tip £${selectedAmount}`,
+                amount: totalAmount,
+            }
+        });
 
         // ===== Wallet Setup =====
         const walletContainer = document.getElementById("wallet-button-container");
 
-        // Clear any previous wallet button
-        walletContainer.innerHTML = "";
+        let prButton;
 
-        // Create paymentRequest using selected amount
-        const paymentRequest = stripe.paymentRequest({
-            country: "GB",
-            currency: "gbp",
-            total: {
-                label: `Tip £${selectedAmount}`,
-                amount: totalAmount,
-            },
-            requestPayerName: true,
-            requestPayerEmail: true,
-        });
-
-        const prButton = elements.create("paymentRequestButton", {
-            paymentRequest,
-        });
+        if (!walletButtonMounted) {
+            prButton = elements.create("paymentRequestButton", {
+                paymentRequest,
+            });
+            walletButtonMounted = true;
+        }
 
         // Check if wallet is supported
         paymentRequest.canMakePayment().then((result) => {
+            
             console.log("Wallet support result:", result);
+            
             if (result) {
                 walletContainer.classList.remove("d-none");
-                prButton.mount("#wallet-button-container");
+                if (prButton) {
+                    prButton.mount("#wallet-button-container");
+                }
             } else {
                 walletContainer.classList.add("d-none");
             }
         });        
 
         paymentRequest.on("paymentmethod", async (ev) => {
-            const response = await fetch(startUrl, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRFToken": csrfToken
-                },
-                body: JSON.stringify({
-                    gig_id: tipSection.dataset.gigId,
-                    amount: parseFloat(selectedAmount)
-                })
-            });
+            const clientSecret = payButton.dataset.clientSecret;
 
-            const data = await response.json();
-
-            if (!data.client_secret) {
+            if (!clientSecret) {
                 ev.complete("fail");
                 return;
             }
 
         const { error, paymentIntent } = await stripe.confirmCardPayment(
-            data.client_secret,
+            clientSecret,
             { payment_method: ev.paymentMethod.id },
             { handleActions: false }
         );
@@ -143,7 +180,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 btn.classList.remove("active");
             });
         }
-    }); 
+        }); 
 
             amountButtons.forEach(btn => btn.classList.remove("active"));
             button.classList.add("active");
@@ -160,6 +197,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // If client secret already exists → confirm payment
         if (payButton.dataset.clientSecret) {
+
+            document.getElementById("card-container").classList.remove("d-none");
+
             payButton.disabled = true;
             payButton.textContent = "Processing...";
 
@@ -175,7 +215,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (error) {
                 document.getElementById("card-errors").textContent = error.message;
                 payButton.disabled = false;
-                payButton.textContent = `Pay £${selectedAmount} Now`;
+                payButton.textContent = `Pay £${payButton.dataset.totalAmount} Now`;
             } else if (paymentIntent.status === "succeeded") {
 
                 console.log("SUCCESS BLOCK HIT");
@@ -216,39 +256,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             }
         }
-
-        // Otherwise → create PaymentIntent first
-        const response = await fetch(startUrl, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "X-CSRFToken": csrfToken
-            },
-            body: JSON.stringify({
-                gig_id: tipSection.dataset.gigId,
-                amount: parseFloat(selectedAmount)             
-            })
-        });
-
-        const data = await response.json();
-        console.log("Payment initiation response", data);
-
-        if (data.client_secret) {
-            payButton.textContent = `Pay £${data.total_amount} Now`;
-            document.getElementById("card-container").classList.remove("d-none");
-            payButton.dataset.clientSecret = data.client_secret;
-            amountButtons.forEach(btn => btn.disabled = true);
-
-            const feeMessage = document.getElementById("fee-message");
-
-            if (data.cover_processing_fees) {
-                feeMessage.textContent = "Processing fees included for day 1";
-            } else {
-                feeMessage.textContent = "Processing fee: 1.4% + 20p added at checkout";
-            }
-
-            feeMessage.classList.remove("d-none");
-        }
     });
-
 });
+
