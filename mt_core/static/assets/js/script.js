@@ -166,6 +166,8 @@ document.addEventListener("DOMContentLoaded", () => {
             { handleActions: false }
         );
 
+        console.log("WALLET STATUS:", paymentIntent.status);
+
         if (error) {
             ev.complete("fail");
             document.getElementById("card-errors").textContent = error.message;
