@@ -140,6 +140,9 @@ document.addEventListener("DOMContentLoaded", () => {
         // Check if wallet is supported
         paymentRequest.canMakePayment().then((result) => {
             
+            document.getElementById("tip-confirmation").textContent = "WALLET EVENT TRIGGERED";
+            document.getElementById("tip-confirmation").classList.remove("d-none");
+            
             console.log("Wallet support result:", result);
             
             if (result) {
