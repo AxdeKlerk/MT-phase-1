@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let selectedAmount = null;
     let walletButtonMounted = false;
+    let prButton = null;
 
     const artistName = tipSection.dataset.artistName;
     const startUrl = tipSection.dataset.startUrl;
@@ -45,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
         requestPayerEmail: true,
     });
 
-    // ✅ Register wallet handler ONCE
+    // Register wallet handler ONCE
     paymentRequest.on("paymentmethod", async (ev) => {
         const clientSecret = payButton.dataset.clientSecret;
 
@@ -114,6 +115,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 payButton.dataset.totalAmount = data.total_amount;
                 payButton.dataset.clientSecret = data.client_secret;
 
+                document.getElementById("card-container").classList.remove("d-none");
+
             } catch (error) {
                 console.error("Payment init failed:", error);
                 payButton.disabled = true;
@@ -132,8 +135,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // Wallet button
             const walletContainer = document.getElementById("wallet-button-container");
-
-            let prButton;
 
             if (!walletButtonMounted) {
                 prButton = elements.create("paymentRequestButton", {
