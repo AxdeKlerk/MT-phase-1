@@ -44,61 +44,62 @@
 
         <!-- Tip Section -->
         <div id="tip-section" data-gig-id="{{ gig.id }}"
-        data-artist-name="{{ artist.name }}"
-        data-amounts="{{ amounts|join:',' }}"
-        data-start-url="{% url 'gigs:start_payment' %}"
-        data-csrf="{{ csrf_token }}"> 
-        <div class="col-12">
-            <div class="tip-section text-center" 
-                data-gig-id="{{ gig.id }}"
-                data-cover-fees="{{ cover_processing_fees|yesno:'true,false' }}">
+            data-artist-name="{{ artist.name }}"
+            data-amounts="{{ amounts|join:',' }}"
+            data-start-url="{% url 'gigs:start_payment' %}"
+            data-csrf="{{ csrf_token }}"> 
+            <div class="col-12">
+                <div class="tip-section text-center" 
+                    data-gig-id="{{ gig.id }}"
+                    data-cover-fees="{{ cover_processing_fees|yesno:'true,false' }}">
 
-                <!-- Confirmation text -->
-                <p id="tip-confirmation" class="text-center mt-1 d-none"></p>
+                    <!-- Confirmation text -->
+                    <p id="tip-confirmation" class="text-center mt-1 d-none"></p>
 
-                <!-- Clear option
-                <button id="clear-tip" class="btn btn-link d-none">
-                    Change amount
-                </button> -->
+                    <!-- Clear option
+                    <button id="clear-tip" class="btn btn-link d-none">
+                        Change amount
+                    </button> -->
 
-                <div id="payment-ui">
-                    <!-- Google Pay & Apple Pay Wallets -->
-                    <div id="wallet-button-container" class="mt-2 mb-2 align-self-center d-none"></div>
+                    <div id="payment-ui">
+                        <!-- Google Pay & Apple Pay Wallets -->
+                        <div id="wallet-button-container" class="mt-2 mb-2 align-self-center d-none"></div>
 
-                    <!-- Absolute Legend Text -->
-                    <p id="pay-confirmation" class="text-center mt-2"></p>
+                        <!-- Absolute Legend Text -->
+                        <p id="pay-confirmation" class="text-center mt-2"></p>
 
-                    <!-- Stripe Card Element -->
-                    <div id="card-container" class="mt-2 mb-2 d-none align-self-center">
-                        <p>Please enter your card details</p>
-                        <p class="small text-danger-muted mt-0 mb-1">Card details aren't stored.<br>Your phone may save them for you.</p>
+                        <!-- Stripe Card Element -->
+                        <div id="card-container" class="mt-2 mb-2 d-none align-self-center">
+                            <p>Please enter your card details</p>
+                            <p class="small text-danger-muted mt-0 mb-1">Card details aren't stored.<br>Your phone may save them for you.</p>
 
-                        <div class="mb-3">
-                            <div id="card-number"></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-6">
-                                <div id="card-expiry"></div>
+                            <div class="mb-3">
+                                <div id="card-number"></div>
                             </div>
-                            <div class="col-6">
-                                <div id="card-cvc"></div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div id="card-expiry"></div>
+                                </div>
+                                <div class="col-6">
+                                    <div id="card-cvc"></div>
+                                </div>
                             </div>
+                            <div id="card-errors" class="text-danger mt-2"></div>
                         </div>
-                        <div id="card-errors" class="text-danger mt-2"></div>
+
+                        <!-- Pay Button -->
+                        <button id="pay-btn" class="btn cta-btn mt-1 mb-1" disabled>
+                            Select an Amount to Tip
+                        </button>
+
+                        <!-- Fee Message -->
+                        <p id="fee-message" class="text-center small mt-2 d-none"></p>
+
+                        <!-- About Your Tip Modal Link -->
+                        <p class="modal-message small mt-2">
+                            Secure payment • <a href="#" data-bs-toggle="modal" data-bs-target="#aboutModal">About your tip</a>
+                        </p>                
                     </div>
-
-                    <!-- Pay Button -->
-                    <button id="pay-btn" class="btn cta-btn mt-1 mb-1" disabled>
-                        Select an Amount to Tip
-                    </button>
-
-                    <!-- Fee Message -->
-                    <p id="fee-message" class="text-center small mt-2 d-none"></p>
-
-                    <!-- About Your Tip Modal Link -->
-                    <p class="modal-message small mt-2">
-                        Secure payment • <a href="#" data-bs-toggle="modal" data-bs-target="#aboutModal">About your tip</a>
-                    </p>                
                 </div>
             </div>
         </div>

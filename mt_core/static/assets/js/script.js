@@ -111,7 +111,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 data = await response.json();
 
-                payButton.textContent = `Pay £${data.total_amount} Now`;
                 payButton.dataset.totalAmount = data.total_amount;
                 payButton.dataset.clientSecret = data.client_secret;
 
@@ -160,7 +159,7 @@ document.addEventListener("DOMContentLoaded", () => {
             button.classList.add("active");
 
             payButton.disabled = false;
-            payButton.textContent = `Confirm and Tip £${selectedAmount}`;
+            payButton.textContent = `Tip £${selectedAmount} Now`;
         });
     });
 
