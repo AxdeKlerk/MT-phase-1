@@ -107,14 +107,6 @@ sup {
 .tip-btn:hover {
     background-color: red;
 }
-.tip-btn:active,
-.tip-btn:focus {
-    outline: none;
-    box-shadow: none;
-}
-.tip-btn {
-    -webkit-tap-highlight-color: transparent;
-}
 .back-btn {
     margin-bottom: 1rem;
 }

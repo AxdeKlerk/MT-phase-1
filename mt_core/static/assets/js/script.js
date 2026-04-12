@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let selectedAmount = null;
     let walletButtonMounted = false;
+    let walletButtonIsMounted = false;
     let prButton = null;
     let paymentComplete = false;
 
@@ -16,6 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const amountButtons = document.querySelectorAll(".tip-btn");
     const confirmationText = document.getElementById("tip-confirmation");
     const payButton = document.getElementById("pay-btn");
+    const backLink = document.getElementById("back-link");
 
     // Initialise Stripe
     const stripeInstance = Stripe(window.STRIPE_PUBLIC_KEY);
@@ -47,6 +49,37 @@ document.addEventListener("DOMContentLoaded", () => {
         requestPayerEmail: true,
     });
 
+    // Shared post-payment lockdown — called by both card and wallet flows once a payment has succeeded
+    function lockdownAfterPayment() {
+        paymentComplete = true;
+
+        // Freeze all amount buttons in place & disable them, to prevent confusion and multiple payments
+        amountButtons.forEach(btn => {
+            btn.disabled = true;
+            btn.classList.remove("active");
+            btn.style.pointerEvents = "none";
+            btn.style.opacity = "0.5";
+            btn.blur();
+        });
+
+        // Move the back link to below the confirmation message
+        if (backLink && !backLink.dataset.moved) {
+            confirmationText.after(backLink);
+            backLink.dataset.moved = "true";
+        }
+    }
+
+    // Card and wallet flows shared confirmation display
+    function showConfirmation() {
+        document.getElementById("payment-ui").classList.add("d-none");
+
+        confirmationText.innerHTML = `You are an absolute legend!<br>
+            <span class="fs-6 fst-italic">Thank you for supporting live music!</span><br>
+            <span class="fs-1 fw-bold mt-0" style="color: red;">${artistName}</span>`;
+
+        confirmationText.classList.remove("d-none");
+    }
+
     // Register wallet handler ONCE
     paymentRequest.on("paymentmethod", async (ev) => {
         const clientSecret = payButton.dataset.clientSecret;
@@ -61,41 +94,19 @@ document.addEventListener("DOMContentLoaded", () => {
             { payment_method: ev.paymentMethod.id },
         );
 
-        console.log("WALLET STATUS:", paymentIntent.status);
-
         if (error) {
             ev.complete("fail");
             document.getElementById("card-errors").textContent = error.message;
-        } else {
-            ev.complete("success");
+            return;
+        }
 
-            if (paymentIntent.status === "succeeded") {
+        ev.complete("success");
 
-                console.log("WALLET SUCCESS BLOCK HIT");
-
-                document.getElementById("payment-ui").classList.add("d-none");
-
-                confirmationText.innerHTML = `You are an absolute legend!<br>
-                <span class="fs-6 fst-italic">Thank you for supporting live music!</span>
-                <span class="fs-1 fw-bold mt-0" style="color: red;">${artistName}</span>`;
-
-                confirmationText.classList.remove("d-none");
-                paymentComplete = true;
-            }
-
-            payButton.disabled = true;
-            payButton.textContent = "Select an Amount to Tip";
-
-            setTimeout(() => {
-                amountButtons.forEach(btn => {
-                    btn.disabled = true;
-                    btn.classList.remove("active");
-                    btn.blur();
-                    btn.style.pointerEvents = "none";
-                    btn.style.opacity = "0.5";
-                });
-            },
-        100);
+        if (paymentIntent.status === "succeeded") {
+            console.log("WALLET SUCCESS BLOCK HIT");
+            showConfirmation();
+            lockdownAfterPayment();
+        }
     });
 
     // Card Elements
@@ -111,6 +122,7 @@ document.addEventListener("DOMContentLoaded", () => {
     amountButtons.forEach(button => {
         button.addEventListener("click", async () => {
             if (paymentComplete || button.disabled) return;
+
             let data;
             selectedAmount = button.dataset.amount;
 
@@ -131,7 +143,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 payButton.dataset.totalAmount = data.total_amount;
                 payButton.dataset.clientSecret = data.client_secret;
-                payButton.textContent = `Pay £${payButton.dataset.totalAmount} Now`;
 
                 document.getElementById("card-container").classList.remove("d-none");
 
@@ -146,28 +157,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
             paymentRequest.update({
                 total: {
-                    label: `Tip £${selectedAmount} Now`,
+                    label: `Tip £${selectedAmount}`,
                     amount: totalAmount,
                 }
             });
 
-            // Wallet button
+            // Wallet button — create once, mount once
             const walletContainer = document.getElementById("wallet-button-container");
 
             if (!walletButtonMounted) {
-                prButton = elements.create("paymentRequestButton", {
-                    paymentRequest,
-                });
+                prButton = elements.create("paymentRequestButton", { paymentRequest });
                 walletButtonMounted = true;
             }
 
             paymentRequest.canMakePayment().then((result) => {
-                console.log("Wallet support result:", result);
-
                 if (result) {
                     walletContainer.classList.remove("d-none");
-                    if (prButton) {
+                    if (prButton && !walletButtonIsMounted) {
                         prButton.mount("#wallet-button-container");
+                        walletButtonIsMounted = true;
                     }
                 } else {
                     walletContainer.classList.add("d-none");
@@ -182,51 +190,31 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // Card payment flow 
+    // Card payment flow
     payButton.addEventListener("click", async () => {
-        if (!selectedAmount) return;
+        if (!selectedAmount || !payButton.dataset.clientSecret) return;
 
-        if (payButton.dataset.clientSecret) {
-            payButton.disabled = true;
-            payButton.textContent = "Processing...";
+        payButton.disabled = true;
+        payButton.textContent = "Processing...";
 
-            const { error, paymentIntent } = await stripeInstance.confirmCardPayment(
-                payButton.dataset.clientSecret,
-                {
-                    payment_method: {
-                        card: cardNumber
-                    }
+        const { error, paymentIntent } = await stripeInstance.confirmCardPayment(
+            payButton.dataset.clientSecret,
+            {
+                payment_method: {
+                    card: cardNumber
                 }
-            );
+            }
+        );
 
-            if (error) {
-                document.getElementById("card-errors").textContent = error.message;
-                payButton.disabled = false;
-                payButton.textContent = `Pay £${payButton.dataset.totalAmount} Now`;
+        if (error) {
+            document.getElementById("card-errors").textContent = error.message;
+            payButton.disabled = false;
+            payButton.textContent = `Tip £${selectedAmount} Now`;
 
-            } else if (paymentIntent.status === "succeeded") {
-
-                console.log("SUCCESS BLOCK HIT");
-
-                document.getElementById("payment-ui").classList.add("d-none");
-
-                confirmationText.innerHTML = `You are an absolute legend!<br>
-                <span class="fs-6 fst-italic">Thank you for supporting live music!</span>
-                <span class="fs-1 fw-bold mt-0" style="color: red;">${artistName}</span>`;
-
-                confirmationText.classList.remove("d-none");
-                paymentComplete = true;
-
-                setTimeout(() => {
-                    amountButtons.forEach(btn => {
-                        btn.disabled = true;
-                        btn.classList.remove("active");
-                        btn.blur();
-                        btn.style.pointerEvents = "none";
-                        btn.style.opacity = "0.5";
-                    });
-                },
-            100);
+        } else if (paymentIntent.status === "succeeded") {
+            console.log("CARD SUCCESS BLOCK HIT");
+            showConfirmation();
+            lockdownAfterPayment();
         }
     });
 });
