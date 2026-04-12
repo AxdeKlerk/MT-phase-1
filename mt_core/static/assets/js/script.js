@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let selectedAmount = null;
     let walletButtonMounted = false;
     let prButton = null;
+    let paymentComplete = false;
 
     const artistName = tipSection.dataset.artistName;
     const startUrl = tipSection.dataset.startUrl;
@@ -79,6 +80,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <span class="fs-1 fw-bold mt-0" style="color: red;">${artistName}</span>`;
 
                 confirmationText.classList.remove("d-none");
+                paymentComplete = true;
             }
 
             payButton.disabled = true;
@@ -103,6 +105,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Amount selection
     amountButtons.forEach(button => {
         button.addEventListener("click", async () => {
+            if (paymentComplete) return;
             let data;
             selectedAmount = button.dataset.amount;
 
@@ -209,6 +212,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <span class="fs-1 fw-bold mt-0" style="color: red;">${artistName}</span>`;
 
                 confirmationText.classList.remove("d-none");
+                paymentComplete = true;
 
                 amountButtons.forEach(btn => {
                     btn.disabled = true;
