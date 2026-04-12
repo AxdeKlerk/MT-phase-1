@@ -89,6 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
             amountButtons.forEach(btn => {
                 btn.disabled = true;
                 btn.classList.remove("active");
+                btn.blur();
                 btn.style.pointerEvents = "none";
                 btn.style.opacity = "0.5";
             });
@@ -217,6 +218,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 amountButtons.forEach(btn => {
                     btn.disabled = true;
                     btn.classList.remove("active");
+                    btn.blur();
                     btn.style.pointerEvents = "none";
                     btn.style.opacity = "0.5";
                 });
