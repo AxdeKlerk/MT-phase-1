@@ -17,8 +17,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const payButton = document.getElementById("pay-btn");
 
     // Initialise Stripe
-    const stripe = Stripe(window.STRIPE_PUBLIC_KEY);
-    const elements = stripe.elements();
+    const stripeInstance = Stripe(window.STRIPE_PUBLIC_KEY);
+    const elements = stripeInstance.elements();
 
     const style = {
         base: {
@@ -34,8 +34,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
 
-    // ✅ Create paymentRequest FIRST
-    let paymentRequest = stripe.paymentRequest({
+    // Create paymentRequest FIRST
+    let paymentRequest = stripeInstance.paymentRequest({
         country: "GB",
         currency: "gbp",
         total: {
@@ -68,6 +68,19 @@ document.addEventListener("DOMContentLoaded", () => {
             document.getElementById("card-errors").textContent = error.message;
         } else {
             ev.complete("success");
+
+            if (paymentIntent.status === "succeeded") {
+
+                console.log("WALLET SUCCESS BLOCK HIT");
+
+                document.getElementById("payment-ui").classList.add("d-none");
+
+                confirmationText.innerHTML = `You are an absolute legend!<br>
+                <span class="fs-6 fst-italic">Thank you for supporting live music!</span>
+                <span class="fs-1 fw-bold mt-0" style="color: red;">${artistName}</span>`;
+
+                confirmationText.classList.remove("d-none");
+            }
 
             payButton.disabled = true;
             payButton.textContent = "Select an Amount to Tip";
@@ -113,6 +126,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 payButton.dataset.totalAmount = data.total_amount;
                 payButton.dataset.clientSecret = data.client_secret;
+                payButton.textContent = `Pay £${payButton.dataset.totalAmount} Now`;
 
                 document.getElementById("card-container").classList.remove("d-none");
 
@@ -127,7 +141,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             paymentRequest.update({
                 total: {
-                    label: `Tip £${selectedAmount}`,
+                    label: `Tip £${selectedAmount} Now`,
                     amount: totalAmount,
                 }
             });
@@ -171,7 +185,7 @@ document.addEventListener("DOMContentLoaded", () => {
             payButton.disabled = true;
             payButton.textContent = "Processing...";
 
-            const { error, paymentIntent } = await stripe.confirmCardPayment(
+            const { error, paymentIntent } = await stripeInstance.confirmCardPayment(
                 payButton.dataset.clientSecret,
                 {
                     payment_method: {
@@ -196,6 +210,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <span class="fs-1 fw-bold mt-0" style="color: red;">${artistName}</span>`;
 
                 confirmationText.classList.remove("d-none");
+                
             }
         }
     });
