@@ -87,8 +87,10 @@ document.addEventListener("DOMContentLoaded", () => {
             payButton.textContent = "Select an Amount to Tip";
 
             amountButtons.forEach(btn => {
-                btn.disabled = false;
+                btn.disabled = true;
                 btn.classList.remove("active");
+                btn.style.pointerEvents = "none";
+                btn.style.opacity = "0.5";
             });
         }
     });
@@ -105,7 +107,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Amount selection
     amountButtons.forEach(button => {
         button.addEventListener("click", async () => {
-            if (paymentComplete) return;
+            if (paymentComplete || button.disabled) return;
             let data;
             selectedAmount = button.dataset.amount;
 
@@ -179,7 +181,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // Card payment flow (unchanged)
+    // Card payment flow 
     payButton.addEventListener("click", async () => {
         if (!selectedAmount) return;
 
@@ -217,6 +219,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 amountButtons.forEach(btn => {
                     btn.disabled = true;
                     btn.classList.remove("active");
+                    btn.style.pointerEvents = "none";
+                    btn.style.opacity = "0.5";
                 });
                 
             }
