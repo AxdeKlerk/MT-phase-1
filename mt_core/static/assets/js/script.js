@@ -111,8 +111,6 @@ document.addEventListener("DOMContentLoaded", () => {
             let data;
             selectedAmount = button.dataset.amount;
 
-            if (button.classList.contains("active")) return;
-
             try {
                 const response = await fetch(startUrl, {
                     method: "POST",
