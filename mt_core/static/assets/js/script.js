@@ -209,6 +209,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 <span class="fs-1 fw-bold mt-0" style="color: red;">${artistName}</span>`;
 
                 confirmationText.classList.remove("d-none");
+
+                amountButtons.forEach(btn => {
+                    btn.disabled = true;
+                    btn.classList.remove("active");
+                });
                 
             }
         }
