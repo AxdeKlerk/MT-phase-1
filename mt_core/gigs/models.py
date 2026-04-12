@@ -139,7 +139,9 @@ class PaymentIntent(models.Model):
 
     scan_event = models.ForeignKey(
         ScanEvent,
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
         related_name="payment_intents"
     )
 

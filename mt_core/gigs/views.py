@@ -171,13 +171,12 @@ def start_payment(request):
     ).first()
 
     # Create PaymentIntent tracking record
-    if scan_event:
-        PaymentIntent.objects.create(
-            scan_event=scan_event,
-            stripe_payment_intent_id=intent.id,
-            amount=amount_pence,
-            status="created"
-        )
+    PaymentIntent.objects.create(
+    scan_event=scan_event if scan_event else None,
+    stripe_payment_intent_id=intent.id,
+    amount=amount_pence,
+    status="created"
+    )
 
     # Return response
     return JsonResponse({
@@ -186,6 +185,7 @@ def start_payment(request):
         "fee_amount": str(fee.quantize(Decimal("0.01"))),
         "cover_processing_fees": gig.cover_processing_fees,
     })
+
 
 @staff_member_required
 def phase1_report(request):

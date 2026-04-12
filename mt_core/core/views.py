@@ -55,22 +55,29 @@ def stripe_webhook(request):
         amount_received = payment_intent["amount_received"]  # in pence
         metadata = payment_intent.get("metadata", {})
         gig_id = metadata.get("gig_id")
-        processor_id = payment_intent["id"]
-
+        
+        if not gig_id:
+            print(f"Missing gig_id in metadata for {processor_id}")
+            return HttpResponse(status=200)
+                
         print("Looking for PaymentIntent with ID:", processor_id)
 
-        # Update PaymentIntent tracking record
-        pi = PaymentIntent.objects.filter(
-            stripe_payment_intent_id=processor_id
-        ).first()
+        # Update or create PaymentIntent tracking record
+        pi, created = PaymentIntent.objects.get_or_create(
+            stripe_payment_intent_id=processor_id,
+            defaults={
+                "amount": amount_received,
+                "status": "succeeded",
+                "completed_at": timezone.now(),
+            }
+        )
 
-        if pi:
+        if not created:
             pi.status = "succeeded"
             pi.completed_at = timezone.now()
             pi.save()
-
         else:
-            print("PaymentIntent NOT FOUND")
+            print(f"PaymentIntent created via webhook for {processor_id}")
 
         # Idempotency check
         if Payment.objects.filter(processor_id=processor_id).exists():
