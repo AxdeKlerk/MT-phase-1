@@ -24,6 +24,9 @@
             <div id="back-link" class="back-btn">
                 <a href="{% url 'gigs:date_page' venue.slug gig_date.year gig_date.month gig_date.day %}" class="link">← Back to Artist List for Today</a>
             </div>
+            <div id="back-cta" class="d-none">
+                <a href="{% url 'gigs:date_page' venue.slug gig_date.year gig_date.month gig_date.day %}" class="btn cta-btn">← Back to Artist List</a>
+            </div>
         </div>
         <hr>
 

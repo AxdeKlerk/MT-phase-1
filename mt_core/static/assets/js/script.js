@@ -62,10 +62,17 @@ document.addEventListener("DOMContentLoaded", () => {
             btn.blur();
         });
 
-        // Move the back link to below the confirmation message
-        if (backLink && !backLink.dataset.moved) {
-            confirmationText.after(backLink);
-            backLink.dataset.moved = "true";
+        // Hide the plain link
+        if (backLink) {
+            backLink.classList.add("d-none");
+        }
+
+        // Move the CTA below the confirmation message
+        const backCta = document.getElementById("back-cta");
+        if (backCta && !backCta.dataset.moved) {
+            confirmationText.after(backCta);
+            backCta.classList.remove("d-none");
+            backCta.dataset.moved = "true";
         }
     }
 
