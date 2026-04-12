@@ -68,15 +68,15 @@ class PaymentIntentAdmin(admin.ModelAdmin):
     list_select_related = ('scan_event', 'scan_event__gig')
 
     def gig_name(self, obj):
-        return obj.scan_event.gig
+        return obj.scan_event.gig if obj.scan_event else "No Scan"
     gig_name.short_description = "Gig"
 
     def format(self, obj):
-        return obj.scan_event.format
+        return obj.scan_event.format if obj.scan_event else "Unknown"
     format.short_description = "Format"
 
     def fee_model(self, obj):
-        return obj.scan_event.fee_model
+        return obj.scan_event.fee_model if obj.scan_event else "Unknown"
     fee_model.short_description = "Fee Model"
 
 

@@ -74,7 +74,7 @@ class Payment(models.Model):
 
     @property
     def gig_date(self):
-        return self.gig.gig_date
+        return self.scan_event.gig.gig_date if self.scan_event else None
     
     @property
     def is_successful(self):
@@ -166,6 +166,8 @@ class PaymentIntent(models.Model):
         null=True,
         blank=True
     )
+
+    is_repeat = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.stripe_payment_intent_id} - {self.status}"

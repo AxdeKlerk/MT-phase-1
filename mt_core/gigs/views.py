@@ -170,12 +170,22 @@ def start_payment(request):
         session_key=session_key
     ).first()
 
+    # Check for existing successful PaymentIntent for this session and gig
+    from .models import PaymentIntent as PI
+
+    existing_success = PaymentIntent.objects.filter(
+        scan_event__isnull=False,
+        scan_event__session_key=session_key,
+        status="succeeded"
+    ).exists()
+
     # Create PaymentIntent tracking record
     PaymentIntent.objects.create(
-    scan_event=scan_event if scan_event else None,
-    stripe_payment_intent_id=intent.id,
-    amount=amount_pence,
-    status="created"
+        scan_event=scan_event if scan_event else None,
+        stripe_payment_intent_id=intent.id,
+        amount=amount_pence,
+        status="created",
+        is_repeat=existing_success
     )
 
     # Return response
@@ -195,15 +205,16 @@ def phase1_report(request):
     # SECTION 1 — Condition Level Metrics
     condition_data = []
 
-    for condition in ["poster", "card"]:
+    for condition in ["poster", "card", "unknown"]:
 
         scans = ScanEvent.objects.filter(format=condition)
 
         scan_count = scans.count()
 
-        intents = PaymentIntent.objects.filter(
-            scan_event__format=condition
-        )
+        if condition == "unknown":
+            intents = PaymentIntent.objects.filter(scan_event__isnull=True)
+        else:
+            intents = PaymentIntent.objects.filter(scan_event__format=condition)
 
         intent_count = intents.count()
 
