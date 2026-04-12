@@ -55,11 +55,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Freeze all amount buttons in place & disable them, to prevent confusion and multiple payments
         amountButtons.forEach(btn => {
+            btn.blur();
             btn.disabled = true;
             btn.classList.remove("active");
             btn.style.pointerEvents = "none";
             btn.style.opacity = "0.5";
-            btn.blur();
         });
 
         // Hide the plain link
