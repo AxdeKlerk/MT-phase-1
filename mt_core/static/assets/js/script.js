@@ -86,14 +86,16 @@ document.addEventListener("DOMContentLoaded", () => {
             payButton.disabled = true;
             payButton.textContent = "Select an Amount to Tip";
 
-            amountButtons.forEach(btn => {
-                btn.disabled = true;
-                btn.classList.remove("active");
-                btn.blur();
-                btn.style.pointerEvents = "none";
-                btn.style.opacity = "0.5";
-            });
-        }
+            setTimeout(() => {
+                amountButtons.forEach(btn => {
+                    btn.disabled = true;
+                    btn.classList.remove("active");
+                    btn.blur();
+                    btn.style.pointerEvents = "none";
+                    btn.style.opacity = "0.5";
+                });
+            },
+        100);
     });
 
     // Card Elements
@@ -215,15 +217,16 @@ document.addEventListener("DOMContentLoaded", () => {
                 confirmationText.classList.remove("d-none");
                 paymentComplete = true;
 
-                amountButtons.forEach(btn => {
-                    btn.disabled = true;
-                    btn.classList.remove("active");
-                    btn.blur();
-                    btn.style.pointerEvents = "none";
-                    btn.style.opacity = "0.5";
-                });
-                
-            }
+                setTimeout(() => {
+                    amountButtons.forEach(btn => {
+                        btn.disabled = true;
+                        btn.classList.remove("active");
+                        btn.blur();
+                        btn.style.pointerEvents = "none";
+                        btn.style.opacity = "0.5";
+                    });
+                },
+            100);
         }
     });
 });
