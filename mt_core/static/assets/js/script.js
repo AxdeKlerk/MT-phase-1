@@ -80,9 +80,9 @@ document.addEventListener("DOMContentLoaded", () => {
     function showConfirmation() {
         document.getElementById("payment-ui").classList.add("d-none");
 
-        confirmationText.innerHTML = `You are an absolute legend!<br>
-            <span class="fs-6 fst-italic">Thank you for supporting live music!</span><br>
-            <span class="fs-1 fw-bold mt-0" style="color: red;">${artistName}</span>`;
+        confirmationText.innerHTML = `
+            <div class="mb-0" style="line-height: 0.5; color: red;">You are an absolute legend</div>
+            <div class="fs-6 fst-italic mt-0 mb-" style="line-height: 0.5;">Thank you for supporting live music</div>`;
 
         confirmationText.classList.remove("d-none");
     }

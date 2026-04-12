@@ -32,16 +32,17 @@
 
         <!-- Artist Logo -->
         <div class="artist-tip-row">
+            <div class="text-center tip-text">Tip</div>
             <div class="artist-logo-tip-box">
                 {% include "gigs/artist_logo.html" with artist=gig.artist %}
             </div>
         </div>
-        <h3 class="text-center">Tip {{ artist.name }}</h3>
+        <!-- <h3 class="text-center">Tip {{ artist.name }}</h3> -->
 
         <!-- Amount buttons -->
         <div class="text-center">
             {% for amount in amounts %}
-                <button type="button" class="btn tip-btn" data-amount="{{ amount }}">£{{ amount }}</button>
+                <button type="button" class="btn tip-btn mb-0" data-amount="{{ amount }}">£{{ amount }}</button>
             {% endfor %}
         </div>
 
@@ -57,7 +58,7 @@
                     data-cover-fees="{{ cover_processing_fees|yesno:'true,false' }}">
 
                     <!-- Confirmation text -->
-                    <p id="tip-confirmation" class="text-center mt-1 d-none"></p>
+                    <p id="tip-confirmation" class="text-center d-none"></p>
 
                     <!-- Clear option
                     <button id="clear-tip" class="btn btn-link d-none">
@@ -72,7 +73,7 @@
                         <p id="pay-confirmation" class="text-center mt-2"></p>
 
                         <!-- Stripe Card Element -->
-                        <div id="card-container" class="mt-2 mb-2 d-none align-self-center">
+                        <div id="card-container" class="mt-2 mb-3 d-none align-self-center">
                             <p>Please enter your card details</p>
                             <p class="small text-danger-muted mt-0 mb-1">Card details aren't stored.<br>Your phone may save them for you.</p>
 
@@ -91,7 +92,7 @@
                         </div>
 
                         <!-- Pay Button -->
-                        <button id="pay-btn" class="btn cta-btn mt-1 mb-1" disabled>
+                        <button id="pay-btn" class="btn cta-btn mt-1 mb-2" disabled>
                             Select an Amount to Tip
                         </button>
 
