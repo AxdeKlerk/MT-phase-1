@@ -86,7 +86,7 @@ sup {
     border-width: 1px;
     border-style: solid;
     padding: 5px 10px;
-    font-size: 0.8rem;
+    font-size: 1rem;
     margin-bottom: 0;
 }
 .cta-btn:hover {
@@ -113,6 +113,7 @@ sup {
 }
 .back-btn {
     margin-bottom: 1rem;
+    font-size: 1rem;
 }
 #back-cta {
     margin-top: 2rem;
@@ -129,6 +130,7 @@ sup {
     padding-left: 1rem;
     padding-right: 1rem;
     gap: 1rem;
+    font-size: 1rem;
 }
 .artist-logo-box {
     width: 160px;
@@ -226,11 +228,17 @@ sup {
 }
 
 /* Media Queries */
-@media (max-width: 330px) {
+@media (max-width:330px) {
     .artist-row {
-        padding-right: auto;
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
     }
     .cta-btn {
-        font-size: 0.7rem;
+        font-size: 0.5rem;
+    }
+}
+@media (max-width: 349px) {
+    .cta-btn {
+        font-size: 0.8rem;
     }
 }
