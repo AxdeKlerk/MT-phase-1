@@ -58,7 +58,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const { error, paymentIntent } = await stripe.confirmCardPayment(
             clientSecret,
             { payment_method: ev.paymentMethod.id },
-            { handleActions: false }
         );
 
         console.log("WALLET STATUS:", paymentIntent.status);
