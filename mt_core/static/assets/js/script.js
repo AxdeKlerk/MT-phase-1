@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        const { error, paymentIntent } = await stripe.confirmCardPayment(
+        const { error, paymentIntent } = await stripeInstance.confirmCardPayment(
             clientSecret,
             { payment_method: ev.paymentMethod.id },
         );
