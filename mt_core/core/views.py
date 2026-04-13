@@ -29,7 +29,7 @@ def home(request):
 def stripe_webhook(request):
 
     print("WEBHOOK HIT")
-    
+
     payload = request.body
     sig_header = request.META.get("HTTP_STRIPE_SIGNATURE")
     endpoint_secret = settings.STRIPE_WEBHOOK_SECRET
@@ -72,6 +72,7 @@ def stripe_webhook(request):
                 "amount": amount_received,
                 "status": "succeeded",
                 "completed_at": timezone.now(),
+                "scan_event": None,
             }
         )
 
