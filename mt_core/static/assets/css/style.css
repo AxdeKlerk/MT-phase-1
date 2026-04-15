@@ -179,6 +179,11 @@ sup {
     max-width: 100%;
     object-fit: contain;
 }
+#wallet-button-container {
+    border: 2px solid #dc3545; /* Bootstrap danger red */
+    border-radius: 6px;
+    padding: 6px;
+}
 #data-message {
     color: red;
 }
