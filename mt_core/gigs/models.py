@@ -48,13 +48,15 @@ class Gig(models.Model):
     
     def __str__(self):
         return f"{self.artist} at {self.venue} on {self.gig_date}"
-    
+
+
 class Payment(models.Model):
     gig = models.ForeignKey(Gig, on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=5, decimal_places=2)
     payment_date = models.DateTimeField(auto_now_add=True)
     reference = models.CharField(max_length=255, blank=True, null=True)
     processor_id = models.CharField(max_length=255, unique=True, blank=True, null=True)
+    tip_amount = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
 
     
     STATUS_CHOICES = [
@@ -74,7 +76,7 @@ class Payment(models.Model):
 
     @property
     def gig_date(self):
-        return self.scan_event.gig.gig_date if self.scan_event else None
+        return self.gig.gig_date
     
     @property
     def is_successful(self):

@@ -3,7 +3,7 @@ from django.conf import settings
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import redirect
-from gigs.models import Gig, Payment, PaymentIntent
+from gigs.models import Gig, Payment, PaymentIntent, ScanEvent
 from datetime import date
 from decimal import Decimal
 from django.db import IntegrityError
@@ -24,6 +24,7 @@ def home(request):
         return redirect("gigs:venue", venue_slug=gig.venue.slug)
     
     return redirect("/admin/")
+
 
 @csrf_exempt
 def stripe_webhook(request):
@@ -57,6 +58,8 @@ def stripe_webhook(request):
         processor_id = payment_intent["id"]
         amount_received = payment_intent["amount_received"]  # in pence
         metadata = payment_intent.get("metadata", {})
+        tip_amount = metadata.get("tip_amount")
+        tip_amount = Decimal(tip_amount) if tip_amount else None
         gig_id = metadata.get("gig_id")
         
         if not gig_id:
@@ -82,6 +85,25 @@ def stripe_webhook(request):
             pi.save()
         else:
             print(f"PaymentIntent created via webhook for {processor_id}")
+        
+        # Fallback: attach ScanEvent if missing and gig_id is available
+        if pi.scan_event is None:
+
+            scan_event = (
+                ScanEvent.objects
+                .filter(gig_id=gig_id)
+                .order_by("-created_at")
+                .first()
+            )
+
+            print(f"Fallback search for gig {gig_id} returned:", scan_event)
+
+            if scan_event:
+                pi.scan_event = scan_event
+                pi.save()
+                print(f"ScanEvent attached via fallback for {processor_id}")
+            else:
+                print(f"No ScanEvent found for fallback on {processor_id}")
 
         # Idempotency check
         if Payment.objects.filter(processor_id=processor_id).exists():
@@ -103,6 +125,7 @@ def stripe_webhook(request):
             Payment.objects.create(
                 gig=gig,
                 amount=amount,
+                tip_amount=tip_amount,
                 processor_id=processor_id,
                 status="successful",
             )
@@ -114,5 +137,4 @@ def stripe_webhook(request):
         print(f"E3 CONFIRMED for processor ID: {processor_id}")
 
     return HttpResponse(status=200)
-
 

@@ -152,7 +152,8 @@ def start_payment(request):
         payment_method_types=["card"],
         metadata={
             "gig_id": str(gig_id),
-            "artist_name": gig.artist.name
+            "artist_name": gig.artist.name,
+            "tip_amount": amount
         }
     )
 
@@ -235,7 +236,6 @@ def phase1_report(request):
             "intent_count": intent_count,
             "success_count": success_count,
             "scan_to_intent": (intent_count / scan_count * 100) if scan_count else 0,
-            "scan_to_success": (success_count / scan_count * 100) if scan_count else 0,
             "avg_tip": avg_tip or 0,
             "tips_per_100_scans": (success_count / scan_count * 100) if scan_count else 0,
 
@@ -253,12 +253,12 @@ def phase1_report(request):
         .order_by("-total_value")
     )
 
-    # SECTION 3 — Chronological Tip Log
-    tip_log = (
-        Payment.objects
-        .select_related("gig__artist", "gig__venue")
-        .order_by("-payment_date")
-    )
+    # SECTION 3 — Chronological Tip Log for Phase 2 (Not currently displayed)
+    #tip_log = (
+        #Payment.objects
+        #.select_related("gig__artist", "gig__venue")
+        #.order_by("-payment_date")
+    #)
 
     # SECTION 4 — Time of Day Distribution (Successful Only)
     time_distribution = (
@@ -272,11 +272,28 @@ def phase1_report(request):
         .order_by("hour")
     )
 
+    total_payments = Payment.objects.count()
+
+    total_revenue = Payment.objects.aggregate(
+        total=Sum("amount")
+    )["total"] or 0
+
+    total_scans = sum(item["scan_count"] for item in condition_data)
+    total_success = sum(item["success_count"] for item in condition_data)
+
+    overall_tips_per_100 = (
+        (total_success / total_scans) * 100
+        if total_scans else 0
+    )
+
     context = {
         "condition_data": condition_data,
         "artist_totals": artist_totals,
-        "tip_log": tip_log,
+        #"tip_log": tip_log, For Phase 2
         "time_distribution": time_distribution,
+        "total_payments": total_payments,
+        "total_revenue": total_revenue,
+        "overall_tips_per_100": overall_tips_per_100,
     }
 
     return render(request, "gigs/phase1_report.html", context)
