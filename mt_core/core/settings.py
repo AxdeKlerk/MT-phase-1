@@ -49,6 +49,8 @@ ALLOWED_HOSTS = ["localhost", '127.0.0.1', "moshtip.com", "www.moshtip.com", "mt
 
 # env.list("ALLOWED_HOSTS", default=["localhost", '127.0.0.1', "moshtip.com", "www.moshtip.com"])
 
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
 CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS", default=["https://moshtip.com", "https://www.moshtip.com", "https://mt-phase-1-d8cce4893c41.herokuapp.com"])
 
 
