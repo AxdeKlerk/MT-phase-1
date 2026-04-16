@@ -51,6 +51,13 @@ ALLOWED_HOSTS = ["localhost", '127.0.0.1', "moshtip.com", "www.moshtip.com", "mt
 
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
+# Force secure cookies and HTTPS
+SESSION_COOKIE_SECURE = not DEBUG
+CSRF_COOKIE_SECURE = not DEBUG
+SECURE_SSL_REDIRECT = not DEBUG
+SECURE_HSTS_SECONDS = 31536000 if not DEBUG else 0
+SECURE_HSTS_INCLUDE_SUBDOMAINS = not DEBUG
+
 CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS", default=["https://moshtip.com", "https://www.moshtip.com", "https://mt-phase-1-d8cce4893c41.herokuapp.com"])
 
 

@@ -1,16 +1,12 @@
-console.log("Script Loaded");
-
 document.addEventListener("DOMContentLoaded", () => {
     const tipSection = document.getElementById("tip-section");
     if (!tipSection) return;
 
     let selectedAmount = null;
-    let walletButtonMounted = false;
-    let walletButtonIsMounted = false;
+    let walletButtonInitialised = false;  // Single flag — replaces walletButtonMounted + walletButtonIsMounted
     let prButton = null;
     let paymentComplete = false;
 
-    const artistName = tipSection.dataset.artistName;
     const startUrl = tipSection.dataset.startUrl;
     const csrfToken = tipSection.dataset.csrf;
 
@@ -18,6 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const confirmationText = document.getElementById("tip-confirmation");
     const payButton = document.getElementById("pay-btn");
     const backLink = document.getElementById("back-link");
+    const feeMessage = document.getElementById("fee-message");
 
     // Initialise Stripe
     const stripeInstance = Stripe(window.STRIPE_PUBLIC_KEY);
@@ -110,7 +107,6 @@ document.addEventListener("DOMContentLoaded", () => {
         ev.complete("success");
 
         if (paymentIntent.status === "succeeded") {
-            console.log("WALLET SUCCESS BLOCK HIT");
             showConfirmation();
             lockdownAfterPayment();
         }
@@ -133,6 +129,15 @@ document.addEventListener("DOMContentLoaded", () => {
             let data;
             selectedAmount = button.dataset.amount;
 
+            // Disable button and show loading state while fetching
+            amountButtons.forEach(btn => {
+                btn.classList.remove("active");
+                btn.disabled = true;
+            });
+            button.classList.add("active");
+            payButton.disabled = true;
+            payButton.textContent = "Loading...";
+
             try {
                 const response = await fetch(startUrl, {
                     method: "POST",
@@ -154,13 +159,32 @@ document.addEventListener("DOMContentLoaded", () => {
                 document.getElementById("card-container").classList.remove("d-none");
 
             } catch (error) {
-                console.error("Payment init failed:", error);
+                // Re-enable buttons so user can retry
+                amountButtons.forEach(btn => btn.disabled = false);
+                button.classList.remove("active");
+                selectedAmount = null;
                 payButton.disabled = true;
-                payButton.textContent = "Error — try again";
+                payButton.textContent = "Select an Amount to Tip";
+                document.getElementById("card-errors").textContent = "Something went wrong — please try again.";
                 return;
             }
 
+            // Re-enable amount buttons now fetch is done
+            amountButtons.forEach(btn => btn.disabled = false);
+
             const totalAmount = Math.round(parseFloat(data.total_amount) * 100);
+            const feeAmount = parseFloat(data.fee_amount || 0);
+            const coversFees = data.cover_processing_fees;
+
+            // Show fee message if fan is covering the fee
+            if (feeMessage) {
+                if (!coversFees && feeAmount > 0) {
+                    feeMessage.textContent = `Includes £${feeAmount.toFixed(2)} processing fee`;
+                    feeMessage.classList.remove("d-none");
+                } else {
+                    feeMessage.classList.add("d-none");
+                }
+            }
 
             paymentRequest.update({
                 total: {
@@ -169,31 +193,26 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             });
 
-            // Wallet button — create once, mount once
+            // Wallet button — create and mount once only
             const walletContainer = document.getElementById("wallet-button-container");
 
-            if (!walletButtonMounted) {
+            if (!walletButtonInitialised) {
                 prButton = elements.create("paymentRequestButton", { paymentRequest });
-                walletButtonMounted = true;
+                walletButtonInitialised = true;
+
+                paymentRequest.canMakePayment().then((result) => {
+                    if (result) {
+                        walletContainer.classList.remove("d-none");
+                        prButton.mount("#wallet-button-container");
+                    } else {
+                        walletContainer.classList.add("d-none");
+                    }
+                });
             }
 
-            paymentRequest.canMakePayment().then((result) => {
-                if (result) {
-                    walletContainer.classList.remove("d-none");
-                    if (prButton && !walletButtonIsMounted) {
-                        prButton.mount("#wallet-button-container");
-                        walletButtonIsMounted = true;
-                    }
-                } else {
-                    walletContainer.classList.add("d-none");
-                }
-            });
-
-            amountButtons.forEach(btn => btn.classList.remove("active"));
-            button.classList.add("active");
-
+            // Update pay button with real charge amount (fee-inclusive)
             payButton.disabled = false;
-            payButton.textContent = `Tip £${selectedAmount} Now`;
+            payButton.textContent = `Pay £${parseFloat(data.total_amount).toFixed(2)} Now`;
         });
     });
 
@@ -216,10 +235,9 @@ document.addEventListener("DOMContentLoaded", () => {
         if (error) {
             document.getElementById("card-errors").textContent = error.message;
             payButton.disabled = false;
-            payButton.textContent = `Tip £${selectedAmount} Now`;
+            payButton.textContent = `Pay £${parseFloat(payButton.dataset.totalAmount).toFixed(2)} Now`;
 
         } else if (paymentIntent.status === "succeeded") {
-            console.log("CARD SUCCESS BLOCK HIT");
             showConfirmation();
             lockdownAfterPayment();
         }

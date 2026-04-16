@@ -157,8 +157,6 @@ def start_payment(request):
         }
     )
 
-    print("Stripe metadata:", intent.metadata)
-
     # Ensure session exists
     if not request.session.session_key:
         request.session.create()
