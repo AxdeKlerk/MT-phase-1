@@ -49,13 +49,10 @@
         <!-- Tip Section -->
         <div id="tip-section" data-gig-id="{{ gig.id }}"
             data-artist-name="{{ artist.name }}"
-            data-amounts="{{ amounts|join:',' }}"
             data-start-url="{% url 'gigs:start_payment' %}"
             data-csrf="{{ csrf_token }}"> 
             <div class="col-12">
-                <div class="tip-section text-center" 
-                    data-gig-id="{{ gig.id }}"
-                    data-cover-fees="{{ cover_processing_fees|yesno:'true,false' }}">
+                <div class="tip-section text-center">
 
                     <!-- Confirmation text -->
                     <p id="tip-confirmation" class="text-center d-none"></p>
