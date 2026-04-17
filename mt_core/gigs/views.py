@@ -219,6 +219,9 @@ def phase1_report(request):
 
         success_count = successes.count()
 
+        repeat_count = successes.filter(is_repeat=True).count()
+        repeat_rate = (repeat_count / success_count * 100) if success_count else 0
+
         avg_tip = Payment.objects.filter(
             processor_id__in=successes.values_list(
                 "stripe_payment_intent_id",
@@ -234,6 +237,8 @@ def phase1_report(request):
             "scan_to_intent": (intent_count / scan_count * 100) if scan_count else 0,
             "avg_tip": avg_tip or 0,
             "tips_per_100_scans": (success_count / scan_count * 100) if scan_count else 0,
+            "repeat_count": repeat_count,
+            "repeat_rate": round(repeat_rate, 2),
 
         })
 

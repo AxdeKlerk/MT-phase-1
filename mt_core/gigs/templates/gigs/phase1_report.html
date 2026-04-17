@@ -53,22 +53,12 @@
                 <p class="mb-1"><strong>Scans:</strong> {{ condition.scan_count }}</p>
                 <p class="mb-1"><strong>Intents:</strong> {{ condition.intent_count }}</p>
                 <p class="mb-1"><strong>Successes:</strong> {{ condition.success_count }}</p>
+                <p class="mb-1"><strong>Repeat Tips:</strong> {{ condition.repeat_count }}</p>
+                <p class="mb-1"><strong>Repeat %:</strong> {{ condition.repeat_rate|floatformat:2 }}%</p>
                 <hr>
-
-                <p class="mb-1">
-                    <strong>Scan → Intent:</strong>
-                    {{ condition.scan_to_intent|floatformat:2 }}%
-                </p>
-
-                <p class="mb-1">
-                    <strong>Tips per 100 Scans:</strong>
-                    {{ condition.tips_per_100_scans|floatformat:2 }}
-                </p>
-
-                <p class="mb-0">
-                    <strong>Avg Tip:</strong>
-                    £{{ condition.avg_tip|default:0|floatformat:2 }}
-                </p>
+                <p class="mb-1"><strong>Scan → Intent:</strong>{{ condition.scan_to_intent|floatformat:2 }}%</p>
+                <p class="mb-1"><strong>Tips per 100 Scans:</strong>{{ condition.tips_per_100_scans|floatformat:2 }}</p>
+                <p class="mb-0"><strong>Avg Tip:</strong>£{{ condition.avg_tip|default:0|floatformat:2 }}</p>
             </div>
         </div>
         {% endfor %}
