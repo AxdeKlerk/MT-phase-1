@@ -99,7 +99,7 @@ class ScanEvent(models.Model):
     FORMAT_CHOICES = [
         ("poster", "Poster"),
         ("card", "Card"),
-        ("unknown", "unknown"),
+        ("unknown", "Unknown"),
     ]
 
     gig = models.ForeignKey(
