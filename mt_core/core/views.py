@@ -92,6 +92,11 @@ def stripe_webhook(request):
         # This only applies if no ScanEvent is linked.
         # In normal flow, ScanEvent is created on page load,
         # so this should rarely (if ever) trigger.
+
+        # NOTE:
+        # This is a best-effort fallback.
+        # It attaches the most recent ScanEvent for the gig,
+        # not necessarily the exact one for this payer.
         if pi.scan_event is None:
 
             scan_event = (

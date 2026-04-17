@@ -170,8 +170,6 @@ def start_payment(request):
     ).first()
 
     # Check for existing successful PaymentIntent for this session and gig
-    from .models import PaymentIntent as PI
-
     existing_success = PaymentIntent.objects.filter(
         scan_event__isnull=False,
         scan_event__session_key=session_key,
