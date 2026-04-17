@@ -53,6 +53,8 @@ class ScanEventAdmin(admin.ModelAdmin):
 
 @admin.register(PaymentIntent)
 class PaymentIntentAdmin(admin.ModelAdmin):
+    readonly_fields = ("is_repeat",)
+    
     list_display = (
         'stripe_payment_intent_id',
         'gig_name',
