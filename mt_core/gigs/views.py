@@ -39,7 +39,8 @@ def date_page(request, venue_slug, year, month, day):
 def tip_page(request, gig_id):
     gig = get_object_or_404(
         Gig.objects.select_related("artist", "venue"),
-        pk=gig_id
+        pk=gig_id,
+        artist__is_active=True
     )
 
     context = {

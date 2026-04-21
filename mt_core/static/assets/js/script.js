@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!tipSection) return;
 
     let selectedAmount = null;
+    let currentClientSecret = null;
     let walletButtonInitialised = false;  // Single flag — replaces walletButtonMounted + walletButtonIsMounted
     let prButton = null;
     let paymentComplete = false;
@@ -86,7 +87,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Register wallet handler ONCE
     paymentRequest.on("paymentmethod", async (ev) => {
-        const clientSecret = payButton.dataset.clientSecret;
+        const clientSecret = currentClientSecret;
 
         if (!clientSecret) {
             ev.complete("fail");
@@ -154,6 +155,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 data = await response.json();
 
                 payButton.dataset.totalAmount = data.total_amount;
+
+                currentClientSecret = data.client_secret;
                 payButton.dataset.clientSecret = data.client_secret;
 
                 document.getElementById("card-container").classList.remove("d-none");
