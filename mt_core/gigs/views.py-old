@@ -173,6 +173,7 @@ def start_payment(request):
             "artist_name": gig.artist.name,
             "tip_amount": amount
         },
+
         idempotency_key=idempotency_key
     )
 
@@ -243,13 +244,12 @@ def phase1_report(request):
         repeat_count = successes.filter(is_repeat=True).count()
         repeat_rate = (repeat_count / success_count * 100) if success_count else 0
 
-        # Use tip_amount (the pure tip, excluding processing fees) for accurate averages
         avg_tip = Payment.objects.filter(
             processor_id__in=successes.values_list(
                 "stripe_payment_intent_id",
                 flat=True
             )
-        ).aggregate(avg=Avg("tip_amount"))["avg"]
+        ).aggregate(avg=Avg("amount"))["avg"]
 
         condition_data.append({
             "condition": condition,
@@ -261,6 +261,7 @@ def phase1_report(request):
             "tips_per_100_scans": (success_count / scan_count * 100) if scan_count else 0,
             "repeat_count": repeat_count,
             "repeat_rate": round(repeat_rate, 2),
+
         })
 
     # SECTION 2 — Artist Totals

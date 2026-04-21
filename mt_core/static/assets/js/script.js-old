@@ -130,7 +130,7 @@ document.addEventListener("DOMContentLoaded", () => {
             let data;
             selectedAmount = button.dataset.amount;
 
-            // Disable buttons and show loading state while fetching
+            // Disable button and show loading state while fetching
             amountButtons.forEach(btn => {
                 btn.classList.remove("active");
                 btn.disabled = true;
@@ -238,11 +238,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (error) {
             document.getElementById("card-errors").textContent = error.message;
             payButton.disabled = false;
-            // Guard against NaN if totalAmount dataset was never populated
-            const displayAmount = payButton.dataset.totalAmount
-                ? `Pay £${parseFloat(payButton.dataset.totalAmount).toFixed(2)} Now`
-                : "Select an Amount to Tip";
-            payButton.textContent = displayAmount;
+            payButton.textContent = `Pay £${parseFloat(payButton.dataset.totalAmount).toFixed(2)} Now`;
 
         } else if (paymentIntent.status === "succeeded") {
             showConfirmation();
