@@ -126,7 +126,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Amount selection
     amountButtons.forEach(button => {
         button.addEventListener("click", async () => {
-            if (paymentComplete || button.disabled || fetchInFlight) return;
+            if (paymentComplete || button.disabled || fetchInFlight || currentClientSecret) return;
 
             fetchInFlight = true;
 
@@ -165,6 +165,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 document.getElementById("card-container").classList.remove("d-none");
 
             } catch (error) {
+
                 // Re-enable buttons so user can retry
                 amountButtons.forEach(btn => btn.disabled = false);
                 button.classList.remove("active");
@@ -173,7 +174,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 payButton.textContent = "Select an Amount to Tip";
                 document.getElementById("card-errors").textContent = "Something went wrong — please try again.";
                 
-                fetchInFlight = false;
+                // IMPORTANT: release lock ONLY after everything is finished
+                setTimeout(() => {
+                    fetchInFlight = false;
+                }, 0);
                 return;
             }
 
