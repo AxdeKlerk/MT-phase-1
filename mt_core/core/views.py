@@ -22,10 +22,10 @@ def home(request):
         .first()
         )
 
-    if gig:
+    if gig and gig.venue:
         return redirect("gigs:venue", venue_slug=gig.venue.slug)
     
-    return redirect("/admin/")
+    return redirect("fallback")
 
 
 @csrf_exempt
@@ -148,4 +148,27 @@ def stripe_webhook(request):
         logger.debug("Payment confirmed: %s", processor_id)
 
     return HttpResponse(status=200)
+
+
+def fallback_tip(request):
+    gig = (
+        Gig.objects
+        .filter(gig_date__gte=date.today())
+        .select_related("venue")
+        .order_by("gig_date")
+        .first()
+    )
+
+    if not gig:
+        gig = (
+            Gig.objects
+            .select_related("venue")
+            .order_by("-gig_date")
+            .first()
+        )
+
+    if gig and gig.venue:
+        return redirect("gigs:venue", venue_slug=gig.venue.slug)
+
+    return HttpResponse("No gigs available ... yet!")
 
