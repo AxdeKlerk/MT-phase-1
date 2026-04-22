@@ -217,6 +217,11 @@ sup {
     margin-right: auto;
 }
 
+/*404 and 500 Pages*/
+.error-pages {
+    margin-top: 80px;
+}
+
 /* Phase 1 Report */
 .report-container {
     margin-top: 80px;
