@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}404 Page Not Found{% endblock %}
+
+{% block content %}
+<!--Error message-->
+<div class="container-fluid w-100">
+  <div class="row justify-content-center">
+    <div class="col-11 col-md-8 text-center align-items-center error-item">
+      <img src="https://res.cloudinary.com/dqde3a83z/image/upload/v1748106876/red-horns_meorvq.png" alt="horns logo" class="img-fluid mx-auto d-block">
+      <h1>Ooooops!</h1>
+        <p>Something seems to have gone wrong, but fear not... simply try again.</p>
+        <div>
+            <a class="btn cta-btn mt-2" href="{% url 'gigs:date_page' %}">← Back</a>
+        </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
