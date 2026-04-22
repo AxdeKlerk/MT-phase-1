@@ -27,7 +27,6 @@ def home(request):
     
     return redirect("fallback")
 
-
 @csrf_exempt
 def stripe_webhook(request):
 
@@ -149,7 +148,6 @@ def stripe_webhook(request):
 
     return HttpResponse(status=200)
 
-
 def fallback_tip(request):
     gig = (
         Gig.objects
@@ -172,3 +170,5 @@ def fallback_tip(request):
 
     return HttpResponse("No gigs available ... yet!")
 
+def trigger_500(request):
+    return 1 / 0
