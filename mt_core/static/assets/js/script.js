@@ -135,10 +135,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // Disable buttons and show loading state while fetching
             amountButtons.forEach(btn => {
-                btn.classList.remove("active");
                 btn.disabled = true;
+
+                if (btn === button) {
+                    btn.classList.add("active");
+                } else {
+                    btn.classList.remove("active");
+                    btn.style.opacity = "0.5";
+                }
             });
-            button.classList.add("active");
+
             payButton.disabled = true;
             payButton.textContent = "Loading...";
 
@@ -167,24 +173,25 @@ document.addEventListener("DOMContentLoaded", () => {
             } catch (error) {
 
                 // Re-enable buttons so user can retry
-                amountButtons.forEach(btn => btn.disabled = false);
+                amountButtons.forEach(btn => {
+                    btn.disabled = false;
+                    btn.style.opacity = "1";
+                    btn.classList.remove("active");
+                });
+
                 button.classList.remove("active");
                 selectedAmount = null;
                 payButton.disabled = true;
                 payButton.textContent = "Select an Amount to Tip";
                 document.getElementById("card-errors").textContent = "Something went wrong — please try again.";
-                
-                // IMPORTANT: release lock ONLY after everything is finished
+
+                // IMPORTANT: release lock on error
                 setTimeout(() => {
                     fetchInFlight = false;
                 }, 0);
+
                 return;
             }
-
-            // Re-enable amount buttons now fetch is done
-            amountButtons.forEach(btn => btn.disabled = false);
-
-            fetchInFlight = false;
 
             const totalAmount = Math.round(parseFloat(data.total_amount) * 100);
             const feeAmount = parseFloat(data.fee_amount || 0);
@@ -227,6 +234,11 @@ document.addEventListener("DOMContentLoaded", () => {
             // Update pay button with real charge amount (fee-inclusive)
             payButton.disabled = false;
             payButton.textContent = `Pay £${parseFloat(data.total_amount).toFixed(2)} Now`;
+
+            // Release fetch lock after everything is fully set up
+            setTimeout(() => {
+                fetchInFlight = false;
+            }, 0);
         });
     });
 
