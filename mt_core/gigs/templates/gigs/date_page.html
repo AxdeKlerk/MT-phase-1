@@ -19,23 +19,23 @@
                 </a>
             </p>
 
-    {% if gigs %}
-        {% for gig in gigs %}
+            {% if gigs %}
+                {% for gig in gigs %}
 
-            <!-- Artist Logo -->
-            <div class="artist-row">
-                <div class="artist-logo-box">
-                    {% include "gigs/artist_logo.html" with artist=gig.artist %}
-                </div>
+                    <!-- Artist Logo -->
+                    <div class="artist-row">
+                        <div class="artist-logo-box">
+                            {% include "gigs/artist_logo.html" with artist=gig.artist %}
+                        </div>
 
-                <!-- CTA Btn-->
-                <a href="{% url 'gigs:tip_page' gig.id %}" class="btn cta-btn">Tip This Artist</a>
-            </div>
-            <hr class="w-100">   
-        {% endfor %}  
-            {% else %}
-                <p>No gigs found for this date and venue.</p>
-    {% endif %}
+                        <!-- CTA Btn-->
+                        <a href="{% url 'gigs:tip_page' gig.id %}" class="btn cta-btn">Tip This Artist</a>
+                    </div>
+                    <hr class="w-100">   
+                {% endfor %}  
+                    {% else %}
+                        <p>No gigs found for this date and venue.</p>
+            {% endif %}
         </div>
     </div>
 </div>

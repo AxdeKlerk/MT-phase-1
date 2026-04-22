@@ -36,6 +36,9 @@ hr {
     /*text-decoration: none;*/
     color: red;
 }
+.container-fluid {
+    margin-bottom: 20px;
+}
 
 /* Base Template Styles */
 .header-container {
