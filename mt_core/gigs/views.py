@@ -163,6 +163,8 @@ def start_payment(request):
     # Create idempotency key
     idempotency_key = f"{session_key}-{gig_id}-{amount_decimal}"
 
+    print("IDEMPOTENCY KEY:", idempotency_key)
+
     # Create PaymentIntent
     intent = stripe.PaymentIntent.create(
         amount=amount_pence,

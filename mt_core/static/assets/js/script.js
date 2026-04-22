@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let walletButtonInitialised = false;  // Single flag — replaces walletButtonMounted + walletButtonIsMounted
     let prButton = null;
     let paymentComplete = false;
+    let fetchInFlight = false; // Prevents duplicate fetches from rapid/double clicks
 
     const startUrl = tipSection.dataset.startUrl;
     const csrfToken = tipSection.dataset.csrf;
@@ -125,7 +126,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // Amount selection
     amountButtons.forEach(button => {
         button.addEventListener("click", async () => {
-            if (paymentComplete || button.disabled) return;
+            if (paymentComplete || button.disabled || fetchInFlight) return;
+
+            fetchInFlight = true;
 
             let data;
             selectedAmount = button.dataset.amount;
@@ -169,11 +172,15 @@ document.addEventListener("DOMContentLoaded", () => {
                 payButton.disabled = true;
                 payButton.textContent = "Select an Amount to Tip";
                 document.getElementById("card-errors").textContent = "Something went wrong — please try again.";
+                
+                fetchInFlight = false;
                 return;
             }
 
             // Re-enable amount buttons now fetch is done
             amountButtons.forEach(btn => btn.disabled = false);
+
+            fetchInFlight = false;
 
             const totalAmount = Math.round(parseFloat(data.total_amount) * 100);
             const feeAmount = parseFloat(data.fee_amount || 0);
