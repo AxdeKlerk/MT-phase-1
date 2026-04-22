@@ -12,4 +12,5 @@ urlpatterns = [
     path("test-500/", trigger_500),
 ]
 
-# To test the 500 page, visit /test-500/ which will raise a ZeroDivisionError. This is only for testing purposes and should be removed in production.
+# To test the 500 page, visit https://moshtip.com/test-500/ which will raise a ZeroDivisionError. 
+# This is only for testing purposes and should be removed in production.
