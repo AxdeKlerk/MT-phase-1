@@ -190,14 +190,6 @@ sup {
 #fee-message {
     color: red;
 }
-.modal-message a {
-    color: #f5f5f5;
-    text-decoration: none;
-}
-.modal-message a:hover {
-    color: red;
-    text-decoration: none;
-}
 
 /* Stripe API Styling */
 #card-container {
