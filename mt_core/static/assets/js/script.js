@@ -86,6 +86,13 @@ document.addEventListener("DOMContentLoaded", () => {
         confirmationText.classList.remove("d-none");
     }
 
+    // Check wallet availability once on page load — must run before any user gesture
+    let walletAvailable = false;
+
+    paymentRequest.canMakePayment().then((result) => {
+        walletAvailable = !!result;
+    });
+
     // Register wallet handler ONCE
     paymentRequest.on("paymentmethod", async (ev) => {
         const clientSecret = currentClientSecret;
@@ -214,21 +221,16 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             });
 
-            // Wallet button — create and mount once only
+            // Wallet button — create and mount once only, using pre-fetched availability
             const walletContainer = document.getElementById("wallet-button-container");
 
-            if (!walletButtonInitialised) {
+            if (!walletButtonInitialised && walletAvailable) {
                 prButton = elements.create("paymentRequestButton", { paymentRequest });
                 walletButtonInitialised = true;
-
-                paymentRequest.canMakePayment().then((result) => {
-                    if (result) {
-                        walletContainer.classList.remove("d-none");
-                        prButton.mount("#wallet-button-container");
-                    } else {
-                        walletContainer.classList.add("d-none");
-                    }
-                });
+                walletContainer.classList.remove("d-none");
+                prButton.mount("#wallet-button-container");
+            } else if (!walletAvailable) {
+                walletContainer.classList.add("d-none");
             }
 
             // Update pay button with real charge amount (fee-inclusive)
