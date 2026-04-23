@@ -142,6 +142,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
 
+WHITENOISE_ROOT = BASE_DIR / "static" # Directory for WhiteNoise to serve static files from Stripe for Apple Pay domain verification
+
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
