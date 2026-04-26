@@ -30,7 +30,7 @@ def home(request):
 @csrf_exempt
 def stripe_webhook(request):
 
-    logger.debug("Webhook hit")
+    logger.info("WEBHOOK HIT")
 
     payload = request.body
     sig_header = request.META.get("HTTP_STRIPE_SIGNATURE")
@@ -52,7 +52,7 @@ def stripe_webhook(request):
         return HttpResponse(status=400)
 
     # If we reach here → signature is valid
-    logger.debug("Webhook received and verified")
+    logger.info("Webhook received and verified")
 
     if event["type"] == "payment_intent.succeeded":
         payment_intent = event["data"]["object"]
@@ -117,7 +117,6 @@ def stripe_webhook(request):
         # Idempotency check
         if Payment.objects.filter(processor_id=processor_id).exists():
             
-            logger.debug("Duplicate webhook ignored: %s", processor_id)
             return HttpResponse(status=200)
         
         # Convert pence to Decimal pounds safely
@@ -139,7 +138,7 @@ def stripe_webhook(request):
                 processor_id=processor_id,
                 status="successful",
             )
-            logger.debug("Ledger write complete: %s", processor_id)
+            logger.info("Ledger write complete: %s", processor_id)
         except IntegrityError:
             logger.debug("Race condition prevented duplicate write: %s", processor_id)
             return HttpResponse(status=200)
