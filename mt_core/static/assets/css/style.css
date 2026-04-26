@@ -37,6 +37,7 @@ hr {
     color: #FF0000;
 }
 .container-fluid {
+    margin-top: 3rem;
     margin-bottom: 80px;
 }
 
