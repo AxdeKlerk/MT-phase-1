@@ -204,16 +204,18 @@ document.addEventListener("DOMContentLoaded", () => {
             const feeAmount = parseFloat(data.fee_amount || 0);
             const coversFees = data.cover_processing_fees;
 
-            // Show fee message if fan is covering the fee
-            if (feeMessage) {
-                if (!coversFees && feeAmount > 0) {
-                    feeMessage.textContent = `Includes £${feeAmount.toFixed(2)} processing fee`;
-                    feeMessage.classList.remove("d-none");
-                } else {
-                    feeMessage.classList.add("d-none");
-                }
+            // Show fee message for day 1 and day 2
+            if (coversFees) {
+                feeMessage.textContent = `Processing fees are covered by MOSHTIP for DAY 1 of this pilot!`;
+                feeMessage.classList.remove("d-none");
+            } else if (feeAmount > 0) {
+                // feeMessage.textContent = `Processing fees are NOT covered for DAY 2 of this pilot.<br>Stripe's payment processor fee of £${feeAmount.toFixed(2)} is added at checkout.`;
+                feeMessage.innerHTML = `Processing fees are <span style="color:#E63946;">NOT</span> covered for DAY 2 of this pilot.<br>
+                    Stripe's payment processor fee of <span style="color:#E63946;">£${feeAmount.toFixed(2)}</span> will be added at checkout.`;
+                feeMessage.classList.remove("d-none");
+            } else {
+                feeMessage.classList.add("d-none");
             }
-
             paymentRequest.update({
                 total: {
                     label: `Tip £${selectedAmount}`,

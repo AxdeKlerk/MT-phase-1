@@ -145,7 +145,7 @@ def start_payment(request):
 
     # Calculate fee and total
     if not gig.cover_processing_fees:
-        fee = (amount_decimal * Decimal("0.014")) + Decimal("0.20")
+        fee = (amount_decimal * Decimal("0.015")) + Decimal("0.20")
         total = amount_decimal + fee
     else:
         fee = Decimal("0.00")
