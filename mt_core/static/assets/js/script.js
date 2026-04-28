@@ -206,12 +206,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // Show fee message for day 1 and day 2
             if (coversFees) {
-                feeMessage.textContent = `Processing fees are covered by MOSHTIP<br> for DAY 1 of this pilot!`;
+                feeMessage.innerHTML = `Processing fees are covered by MOSHTIP<br>
+                    for DAY 1 of this pilot!`;
                 feeMessage.classList.remove("d-none");
             } else if (feeAmount > 0) {
                 // feeMessage.textContent = `Processing fees are NOT covered for DAY 2 of this pilot.<br>Stripe's payment processor fee of £${feeAmount.toFixed(2)} is added at checkout.`;
-                feeMessage.innerHTML = `Processing fees are <span style="color:#E63946;">NOT</span> covered<br> for DAY 2 of this pilot.<br>
-                    Stripe's payment processor fee of <span style="color:#E63946;">£${feeAmount.toFixed(2)}</span><br> will be added at checkout.`;
+                feeMessage.innerHTML = `Processing fees are <span style="color:#E63946; fs-3 fw-bold">NOT</span> covered by MOSHTIP<br>
+                    for DAY 2 of this pilot.<br>
+                    Stripe's payment processor fee of <span style="color:#E63946; fs-3 fw-bold">£${feeAmount.toFixed(2)}</span><br>
+                    will be added at checkout.`;
                 feeMessage.classList.remove("d-none");
             } else {
                 feeMessage.classList.add("d-none");

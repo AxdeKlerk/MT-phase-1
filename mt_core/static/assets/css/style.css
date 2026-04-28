@@ -196,6 +196,8 @@ sup {
 }
 .modal-message a {
     color: #FF0000;
+    font-size: 0.85rem;
+    opacity: 0.75;
 }
 /* Stripe API Styling */
 #card-container {
