@@ -169,7 +169,7 @@ def start_payment(request):
     intent = stripe.PaymentIntent.create(
         amount=amount_pence,
         currency="gbp",
-        automatic_payment_methods={"enabled": True},
+        payment_method_types=["card"],
         metadata={
             "gig_id": str(gig_id),
             "artist_name": gig.artist.name,
