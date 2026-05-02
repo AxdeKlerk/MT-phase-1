@@ -86,7 +86,7 @@ document.addEventListener("DOMContentLoaded", () => {
         confirmationText.classList.remove("d-none");
     }
 
-    // Check wallet availability on page load, with retry on amount selection as fallback
+    // Check wallet availability once on page load — must run before any user gesture
     let walletAvailable = false;
 
     paymentRequest.canMakePayment().then((result) => {
@@ -210,6 +210,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     for DAY 1 of this pilot!`;
                 feeMessage.classList.remove("d-none");
             } else if (feeAmount > 0) {
+                // feeMessage.textContent = `Processing fees are NOT covered for DAY 2 of this pilot.<br>Stripe's payment processor fee of £${feeAmount.toFixed(2)} is added at checkout.`;
                 feeMessage.innerHTML = `Processing fees are <span style="color:#E63946; fs-3 fw-bold">NOT</span> covered by MOSHTIP<br>
                     for DAY 2 of this pilot.<br>
                     Stripe's payment processor fee of <span style="color:#E63946; fs-3 fw-bold">£${feeAmount.toFixed(2)}</span><br>
@@ -218,7 +219,6 @@ document.addEventListener("DOMContentLoaded", () => {
             } else {
                 feeMessage.classList.add("d-none");
             }
-
             paymentRequest.update({
                 total: {
                     label: `Tip £${selectedAmount}`,
@@ -226,21 +226,16 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             });
 
-            // Wallet button — create and mount once only, with retry if page load check failed
+            // Wallet button — create and mount once only, using pre-fetched availability
             const walletContainer = document.getElementById("wallet-button-container");
 
-            if (!walletButtonInitialised) {
-                paymentRequest.canMakePayment().then((result) => {
-                    if (result) {
-                        walletAvailable = true;
-                        prButton = elements.create("paymentRequestButton", { paymentRequest });
-                        walletButtonInitialised = true;
-                        walletContainer.classList.remove("d-none");
-                        prButton.mount("#wallet-button-container");
-                    } else {
-                        walletContainer.classList.add("d-none");
-                    }
-                });
+            if (!walletButtonInitialised && walletAvailable) {
+                prButton = elements.create("paymentRequestButton", { paymentRequest });
+                walletButtonInitialised = true;
+                walletContainer.classList.remove("d-none");
+                prButton.mount("#wallet-button-container");
+            } else if (!walletAvailable) {
+                walletContainer.classList.add("d-none");
             }
 
             // Update pay button with real charge amount (fee-inclusive)
