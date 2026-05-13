@@ -38,10 +38,15 @@ class Gig(models.Model):
     venue = models.ForeignKey(Venue, on_delete=models.CASCADE)
     gig_date = models.DateField()
     created_at = models.DateTimeField(auto_now_add=True)
+
     play_order = models.PositiveIntegerField(
         default=0, help_text="Order in which venues are displayed")
+    
     cover_processing_fees = models.BooleanField(
         default=False, help_text="If true, MT will cover payment processing fees for this gig")
+    
+    is_demo = models.BooleanField(
+    default=False, help_text="If true, disables Stripe payments and reporting metrics for this gig")
 
     class Meta:
         unique_together = ("artist", "venue", "gig_date")

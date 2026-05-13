@@ -170,6 +170,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 data = await response.json();
 
+                if (data.demo_mode) {
+
+                    confirmationText.innerHTML = `
+                        <div class="mb-0" style="line-height: 0.5; color: red;">
+                            DEMO MODE
+                        </div>
+                        <div class="fs-6 fst-italic mt-0">
+                            Payment processing is disabled for this demonstration
+                        </div>
+                    `;
+
+                    confirmationText.classList.remove("d-none");
+
+                    amountButtons.forEach(btn => {
+                        btn.disabled = true;
+                        btn.style.opacity = "0.5";
+                    });
+
+                    payButton.classList.add("d-none");
+
+                    fetchInFlight = false;
+
+                    return;
+                }
+
                 payButton.dataset.totalAmount = data.total_amount;
 
                 currentClientSecret = data.client_secret;

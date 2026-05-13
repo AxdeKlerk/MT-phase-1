@@ -60,29 +60,35 @@ def tip_page(request, gig_id):
 
     session_key = request.session.session_key
 
-    # Check existing scan
-    existing_scan = ScanEvent.objects.filter(
-        gig=gig,
-        session_key=session_key
-    ).first()
+    # Only track scans for non-demo gigs
+    if not gig.is_demo:
 
-    if not existing_scan:
-
-        fee_model_snapshot = "absorbed" if gig.cover_processing_fees else "fan_pays"
-
-        format_value = request.GET.get("format", "poster")
-
-        valid_formats = {choice[0] for choice in ScanEvent.FORMAT_CHOICES}
-
-        if format_value not in valid_formats:
-            format_value = "unknown"
-
-        ScanEvent.objects.create(
+        existing_scan = ScanEvent.objects.filter(
             gig=gig,
-            session_key=session_key,
-            format=format_value,
-            fee_model=fee_model_snapshot
-        )
+            session_key=session_key
+        ).first()
+
+        if not existing_scan:
+
+            fee_model_snapshot = (
+                "absorbed" if gig.cover_processing_fees else "fan_pays"
+            )
+
+            format_value = request.GET.get("format", "poster")
+
+            valid_formats = {
+                choice[0] for choice in ScanEvent.FORMAT_CHOICES
+            }
+
+            if format_value not in valid_formats:
+                format_value = "unknown"
+
+            ScanEvent.objects.create(
+                gig=gig,
+                session_key=session_key,
+                format=format_value,
+                fee_model=fee_model_snapshot
+            )
 
     return render(request, "gigs/tip_page.html", context)
 
@@ -131,6 +137,12 @@ def start_payment(request):
     # Enforce Business Rules
     if not gig.artist.is_active:
         return JsonResponse({"error": "Artist is not active"}, status=400)
+    
+    # Block payment processing for demo gigs
+    if gig.is_demo:
+        return JsonResponse({
+            "demo_mode": True
+        })
 
     # Convert amount safely
     try:
