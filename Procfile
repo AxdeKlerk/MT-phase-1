@@ -1,1 +1,1 @@
-web: gunicorn --chdir mt_core core.wsgi
+web: gunicorn config.wsgi
